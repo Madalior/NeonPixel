@@ -1,0 +1,39 @@
+name: Auto Update Wallpapers
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  update-wallpapers:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: pip install requests pillow
+
+    - name: Run Wallpaper Bot
+      run: python bots/wallpaper_bot.py
+
+    - name: Run Video Bot
+      run: python bots/video_bot.py
+
+    - name: Generate JSON
+      run: python bots/generate_json.py
+
+    - name: Commit and Push
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add .
+        git commit -m "Auto update" || echo "No changes"
+        git push
