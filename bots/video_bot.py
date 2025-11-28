@@ -1,26 +1,27 @@
 import requests, os
 
-PEXELS_KEY = "YOUR_PEXELS_API_KEY"
-SAVE_PATH = "videos/"
+PEXELS_API = "YOUR_PEXELS_API_KEY"
+url = "https://api.pexels.com/videos/search"
 
-os.makedirs(SAVE_PATH, exist_ok=True)
+headers = {
+    "Authorization": PEXELS_API
+}
 
-def download(url, filename):
-    try:
-        vid = requests.get(url).content
-        with open(SAVE_PATH + filename, "wb") as f:
-            f.write(vid)
-        print("Downloaded:", filename)
-    except:
-        pass
+os.makedirs("videos", exist_ok=True)
 
-def pexels_live_videos():
-    headers = {"Authorization": PEXELS_KEY}
-    res = requests.get("https://api.pexels.com/videos/search?query=loop&per_page=20", headers=headers).json()
+params = {
+    "query": "loop neon",
+    "per_page": 5,
+    "orientation": "portrait"
+}
 
-    for x in res.get("videos", []):
-        best_quality = x["video_files"][0]["link"]
-        download(best_quality, f"live_{x['id']}.mp4")
+data = requests.get(url, headers=headers, params=params).json()
 
-pexels_live_videos()
-print("Video bot finished.")
+for i, vid in enumerate(data["videos"]):
+    video_url = vid["video_files"][0]["link"]
+    filename = f"videos/live_{i}.mp4"
+
+    v = requests.get(video_url).content
+    open(filename, "wb").write(v)
+
+    print("Saved:", filename)

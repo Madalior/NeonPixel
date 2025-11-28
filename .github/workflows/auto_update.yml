@@ -1,0 +1,41 @@
+name: Auto Update NeonPixel
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # runs every 12 hours
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GH_TOKEN }}
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: pip install requests pillow
+
+    - name: Run Wallpaper Bot
+      run: python bots/wallpaper_bot.py
+
+    - name: Run Video Bot
+      run: python bots/video_bot.py
+
+    - name: Generate JSON
+      run: python bots/generate_json.py
+
+    - name: Commit & Push
+      run: |
+        git config user.name "github-actions"
+        git config user.email "actions@github.com"
+        git add .
+        git commit -m "Auto update wallpapers" || echo "No changes"
+        git push
