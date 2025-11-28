@@ -2,8 +2,8 @@ name: Auto Update NeonPixel
 
 on:
   schedule:
-    - cron: "0 */12 * * *"
-  workflow_dispatch:
+    - cron: "0 */12 * * *"   # Runs every 12 hours
+  workflow_dispatch:         # Allows manual run button
 
 jobs:
   build:
@@ -18,9 +18,11 @@ jobs:
         with:
           python-version: '3.9'
 
+      # FIX 1: Install 'cloudinary' from your requirements.txt
       - name: Install Libraries
         run: pip install -r requirements.txt
 
+      # FIX 2 & 3: Run 'cloud_bot.py' and pass the API Keys
       - name: Run AI Cloud Bot
         env:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
@@ -34,6 +36,7 @@ jobs:
         run: |
           git config --global user.name "NeonPixel AI"
           git config --global user.email "bot@neonpixel.com"
+          # We only need to save these 2 JSON files
           git add data/cloud_wallpapers.json data/videos.json
           git commit -m "🤖 AI Auto-Update: New Assets" || echo "No changes to commit"
           git push
