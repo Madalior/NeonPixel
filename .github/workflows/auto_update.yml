@@ -26,10 +26,6 @@ jobs:
       - name: Install FFmpeg
         run: sudo apt-get install -y ffmpeg
 
-      # 1. Sync with GitHub BEFORE starting (Reduces conflicts)
-      - name: Sync with GitHub
-        run: git pull origin main || echo "Nothing to pull"
-
       - name: Run AI Cloud Bot
         env:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
@@ -43,7 +39,15 @@ jobs:
           git config --global user.name "NeonPixel AI"
           git config --global user.email "bot@neonpixel.com"
           
-          # Safety Net: Create files if they are missing to prevent errors
+          # --- SAFETY NET ---
+          # 1. Fetch the absolute latest version from GitHub
+          git fetch origin main
+          
+          # 2. Force local state to match GitHub (but KEEP the bot's new files)
+          # This removes any "conflict" history and puts the bot on top.
+          git reset --soft origin/main
+          
+          # 3. Create files if missing (Prevents crashes)
           if [ ! -f data/cloud_wallpapers.json ]; then
             mkdir -p data
             echo "[]" > data/cloud_wallpapers.json
@@ -53,12 +57,7 @@ jobs:
             echo "[]" > data/videos.json
           fi
           
+          # 4. Add, Commit, Push
           git add data/cloud_wallpapers.json data/videos.json
-          
-          # Only commit if there are actual changes
-          git diff-index --quiet HEAD || git commit -m "🤖 AI Auto-Update: New Assets"
-          
-          # --- THE MAGIC FIX ---
-          # -Xtheirs means: "If there is a conflict, keep the Bot's changes (Theirs)"
-          git pull --rebase -Xtheirs origin main
-          git push
+          git commit -m "🤖 AI Auto-Update: New Assets" || echo "No changes to commit"
+          git push origin main
