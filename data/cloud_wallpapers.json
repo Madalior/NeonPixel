@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "title": "General Wallpaper",
+        "category": "Anime",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "wallpapers/mobile/Anime/968551.jpg",
+        "type": "image",
+        "res": "4K"
+    }
+]
