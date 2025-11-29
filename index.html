@@ -3,33 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeonPixel | Royal Edition</title>
+    <title>NeonPixel | Imperial Edition</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. CORE VARIABLES --- */
+        /* --- 1. CORE VARIABLES & SETUP --- */
         :root {
-            --bg-deep: #020202;
-            --glass: rgba(20, 20, 20, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            
-            /* The Royal Neon Palette */
+            --bg-deep: #050505;
             --gold-primary: #D4AF37;
+            --gold-light: #fceea7;
             --gold-neon: #ffbd00; 
-            --gold-glow: rgba(255, 189, 0, 0.6);
-            
+            --gold-glow: rgba(255, 189, 0, 0.4);
+            --gold-glow-strong: rgba(255, 189, 0, 0.8);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-panel: rgba(10, 10, 10, 0.85);
             --text-main: #ffffff;
-            --text-muted: #999;
-            
             --font-royal: 'Cinzel', serif;
             --font-modern: 'Montserrat', sans-serif;
-            
-            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+            --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
         
         body {
             background-color: var(--bg-deep);
@@ -38,204 +35,248 @@
             overflow-x: hidden;
         }
 
-        /* --- 2. HERO SECTION --- */
+        /* --- CUSTOM SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(to bottom, #333, var(--gold-primary), #333); 
+            border-radius: 4px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold-neon); }
+
+        /* --- 2. ADVANCED CURSOR --- */
+        .cursor-dot, .cursor-circle {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 99999; border-radius: 50%;
+        }
+        .cursor-dot { width: 6px; height: 6px; background: var(--gold-neon); box-shadow: 0 0 10px var(--gold-neon); }
+        .cursor-circle {
+            width: 40px; height: 40px; border: 1px solid rgba(212, 175, 55, 0.5);
+            transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s;
+        }
+        body.hovering .cursor-circle {
+            width: 60px; height: 60px; background: rgba(255, 189, 0, 0.05);
+            border-color: var(--gold-neon); box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        /* --- 3. BACKGROUND PARTICLES --- */
+        .particles {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; background-image: 
+                radial-gradient(var(--gold-glow) 1px, transparent 1px),
+                radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px; background-position: 0 0, 25px 25px;
+            opacity: 0.1; animation: floatParticles 60s linear infinite;
+        }
+        @keyframes floatParticles { from { transform: translateY(0); } to { transform: translateY(-50px); } }
+
+        /* --- 4. HERO SECTION --- */
         .hero {
-            position: relative; height: 60vh; width: 100%;
+            position: relative; height: 50vh; width: 100%;
             display: flex; flex-direction: column; 
             align-items: center; justify-content: center;
-            overflow: hidden;
-            border-bottom: 1px solid #333;
+            overflow: hidden; z-index: 1;
         }
-
+        
         .hero-video {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 0.5; z-index: 0;
-            filter: contrast(1.1) brightness(0.8);
+            object-fit: cover; opacity: 0.4; filter: blur(2px) contrast(1.2);
         }
-        
         .hero-overlay {
             position: absolute; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(2,2,2,0.3), var(--bg-deep));
-            z-index: 1;
+            background: radial-gradient(circle at center, transparent, var(--bg-deep));
         }
 
-        .hero-content {
-            z-index: 2; text-align: center; margin-top: -40px;
-        }
-
+        .hero-content { z-index: 2; text-align: center; }
+        
         h1 {
-            font-family: var(--font-royal); font-size: 3.5rem;
-            color: #fff; text-transform: uppercase; letter-spacing: 5px;
-            text-shadow: 0 0 20px var(--gold-glow);
-            margin-bottom: 10px;
+            font-family: var(--font-royal); font-size: 4rem; color: #fff;
+            text-transform: uppercase; letter-spacing: 8px;
+            text-shadow: 0 0 30px var(--gold-glow);
+            animation: textGlow 3s infinite alternate;
         }
-        
-        .subtitle {
-            font-size: 0.9rem; letter-spacing: 3px; color: var(--gold-primary);
-            text-transform: uppercase; margin-bottom: 30px;
-        }
+        @keyframes textGlow { from{text-shadow: 0 0 20px var(--gold-glow);} to{text-shadow: 0 0 50px var(--gold-glow-strong);} }
 
-        /* --- 3. CENTER SEARCH BAR --- */
+        /* --- 5. SEARCH --- */
         .search-container {
-            z-index: 10; width: 100%; max-width: 600px; padding: 0 20px;
-            margin-top: 20px;
+            z-index: 10; width: 100%; max-width: 650px; padding: 0 20px;
+            margin-top: 30px; position: relative;
         }
-        
         .search-wrapper {
             position: relative; width: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--gold-primary);
-            border-radius: 50px; /* Oval Shape */
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-            display: flex; align-items: center;
-            transition: 0.3s var(--ease);
+            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 100px;
+            display: flex; align-items: center; transition: 0.4s var(--ease-elastic);
         }
-        
         .search-wrapper:hover, .search-wrapper:focus-within {
-            box-shadow: 0 0 25px var(--gold-glow); /* Neon Glow on Hover */
-            border-color: var(--gold-neon);
+            border-color: var(--gold-neon); box-shadow: 0 0 40px var(--gold-glow); transform: scale(1.02);
         }
-
         .search-input {
             width: 100%; background: transparent; border: none; color: #fff;
-            padding: 15px 25px; font-family: var(--font-modern); font-size: 1rem;
+            padding: 18px 30px; font-family: var(--font-modern); font-size: 1.1rem;
         }
-        .search-icon { padding-right: 25px; color: var(--gold-primary); }
+        .search-icon { padding-right: 30px; color: var(--gold-primary); font-size: 1.2rem; }
 
-        /* --- 4. THE BANNER (New Addition) --- */
-        .banner-section {
-            width: 90%; max-width: 1200px; margin: 30px auto 10px;
-            height: 120px; border-radius: 20px;
-            background: linear-gradient(90deg, #111, #222);
-            border: 1px solid var(--glass-border);
-            position: relative; overflow: hidden;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 5%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        /* --- 6. FEATURED VIDEO DISPLAY BAR --- */
+        .showcase-bar {
+            width: 90%; max-width: 1200px; margin: 20px auto 40px;
+            height: 280px; border-radius: 20px; position: relative;
+            overflow: hidden; border: 1px solid var(--gold-primary);
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.15);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 5; transition: transform 0.4s;
         }
-        
-        .banner-bg {
+        .showcase-bar:hover { transform: translateY(-5px); box-shadow: 0 0 80px rgba(212, 175, 55, 0.3); }
+
+        .showcase-video {
             position: absolute; top:0; left:0; width: 100%; height: 100%;
-            background: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop') center/cover;
-            opacity: 0.4; mask-image: linear-gradient(to right, transparent, black, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black, transparent);
+            object-fit: cover; opacity: 0.85; transition: opacity 0.5s;
         }
+        .showcase-bar:hover .showcase-video { opacity: 1; }
 
-        .banner-text { position: relative; z-index: 2; }
-        .banner-text h3 { font-family: var(--font-royal); color: var(--gold-neon); font-size: 1.5rem; text-shadow: 0 0 10px var(--gold-glow); }
-        .banner-text p { font-size: 0.9rem; color: #ccc; margin-top: 5px; }
+        .showcase-overlay {
+            position: absolute; width: 100%; height: 100%;
+            background: linear-gradient(90deg, #000 0%, transparent 40%, transparent 60%, #000 100%);
+            z-index: 2; pointer-events: none;
+        }
         
-        .banner-btn {
-            position: relative; z-index: 2;
-            padding: 10px 25px; border-radius: 50px; border: 1px solid var(--gold-primary);
-            background: rgba(0,0,0,0.5); color: #fff; cursor: pointer;
-            font-family: var(--font-royal); transition: 0.3s;
-        }
-        .banner-btn:hover { background: var(--gold-primary); color: #000; box-shadow: 0 0 20px var(--gold-glow); }
-
-        /* --- 5. OVAL CATEGORIES & FILTERS --- */
-        .filter-section {
-            padding: 20px 5%; display: flex; flex-direction: column; gap: 15px; align-items: center;
+        .showcase-badge {
+            position: absolute; top: 20px; right: 20px; z-index: 3;
+            background: var(--gold-primary); color: #000;
+            padding: 5px 15px; font-weight: bold; border-radius: 4px;
+            font-family: var(--font-royal); font-size: 0.8rem;
+            box-shadow: 0 0 20px var(--gold-glow);
         }
 
-        /* Scrollable Container */
-        .scroll-row {
-            display: flex; gap: 12px; overflow-x: auto; padding: 10px;
-            width: 100%; justify-content: center;
-            scrollbar-width: none; /* Firefox hide scroll */
-        }
-        .scroll-row::-webkit-scrollbar { display: none; } /* Chrome hide scroll */
-
-        /* The Oval Button Style */
+        /* --- 7. CATEGORIES --- */
+        .filter-section { padding: 10px 5%; display: flex; flex-direction: column; gap: 15px; align-items: center; z-index: 5; position: relative;}
+        .scroll-row { display: flex; gap: 12px; overflow-x: auto; padding: 10px; width: 100%; justify-content: center; scrollbar-width: none; }
+        
         .oval-btn {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border);
-            color: #aaa;
-            padding: 10px 28px;
-            border-radius: 50px; /* Perfectly Oval */
-            white-space: nowrap;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            color: #aaa; padding: 12px 30px; border-radius: 50px;
             font-family: var(--font-modern); font-weight: 600; font-size: 0.85rem;
-            cursor: pointer; transition: all 0.3s var(--ease);
-            text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+            position: relative; overflow: hidden;
         }
+        .oval-btn:hover, .oval-btn.active {
+            border-color: var(--gold-neon); color: var(--gold-neon);
+            box-shadow: 0 0 25px var(--gold-glow); background: rgba(212, 175, 55, 0.05);
+        }
+        .oval-btn.sub { padding: 8px 22px; font-size: 0.75rem; border-color: #333; }
+        .sub-scroll { height: 0; opacity: 0; transition: 0.4s; overflow: hidden;}
+        .sub-scroll.show { height: auto; opacity: 1; padding-bottom: 20px; }
 
-        .oval-btn:hover {
-            border-color: var(--gold-primary);
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        /* Active Neon State */
-        .oval-btn.active {
-            background: rgba(212, 175, 55, 0.1);
-            border-color: var(--gold-neon);
-            color: var(--gold-neon);
-            box-shadow: 0 0 15px var(--gold-glow); /* The Neon Effect */
-            text-shadow: 0 0 5px var(--gold-glow);
-        }
-
-        /* Subcategories Styling (Smaller Ovals) */
-        .sub-scroll {
-            height: 0; opacity: 0; overflow: hidden; transition: 0.4s;
-        }
-        .sub-scroll.show { height: auto; opacity: 1; padding-bottom: 10px; }
-        
-        .oval-btn.sub {
-            padding: 8px 20px; font-size: 0.75rem; border-color: #333;
-        }
-
-        /* --- 6. NAVIGATION TABS (Top Right) --- */
-        .top-nav {
-            position: absolute; top: 20px; right: 30px; z-index: 100;
-            display: flex; gap: 15px;
-        }
-        .nav-link {
-            color: #fff; text-decoration: none; font-size: 0.9rem; text-transform: uppercase;
-            opacity: 0.7; transition: 0.3s; font-family: var(--font-modern); cursor: pointer;
-        }
-        .nav-link:hover, .nav-link.active { opacity: 1; color: var(--gold-neon); text-shadow: 0 0 10px var(--gold-glow); }
-
-        /* --- 7. GRID --- */
-        .gallery {
-            column-count: 4; column-gap: 20px; padding: 20px 5%;
-        }
+        /* --- 8. GALLERY GRID --- */
+        .gallery { column-count: 4; column-gap: 25px; padding: 20px 5%; perspective: 1000px; z-index: 5; position: relative; }
         @media(max-width: 1000px){ .gallery { column-count: 2; } }
         @media(max-width: 600px){ .gallery { column-count: 1; } }
 
         .card {
-            break-inside: avoid; margin-bottom: 20px; border-radius: 12px;
-            overflow: hidden; position: relative; border: 1px solid #222;
-            transition: 0.4s var(--ease); cursor: pointer;
+            break-inside: avoid; margin-bottom: 25px; border-radius: 16px;
+            position: relative; border: 1px solid rgba(255,255,255,0.05);
+            background: #111; transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
         }
-        .card img, .card video { width: 100%; display: block; }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--gold-neon);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(212, 175, 55, 0.1);
+        .card-inner { overflow: hidden; border-radius: 16px; position: relative; }
+        .card img, .card video { width: 100%; display: block; opacity: 0.9; transition: 0.5s; }
+        .card:hover .card-inner img, .card:hover .card-inner video { transform: scale(1.05); opacity: 1; }
+        .card:hover { 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.15);
+            border-color: var(--gold-primary); z-index: 10;
         }
 
-        /* --- MODAL --- */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 9999;
-            align-items: center; justify-content: center; flex-direction: column;
+        /* --- 9. NEW DETAILED MODAL --- */
+        .modal { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.96); z-index: 99999; 
+            align-items: center; justify-content: center; backdrop-filter: blur(15px); 
         }
-        .modal.active { display: flex; animation: fadeIn 0.3s; }
-        .modal-content { max-width: 90%; max-height: 80vh; border: 1px solid var(--gold-primary); box-shadow: 0 0 40px var(--gold-glow); }
-        .modal-content img, .modal-content video { max-width: 100%; max-height: 80vh; display: block; }
-        .close-btn { color: white; margin-top: 20px; cursor: pointer; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+        .modal.active { display: flex; animation: fadeIn 0.4s; }
+        
+        .modal-layout {
+            display: flex; width: 85vw; max-width: 1100px; height: 80vh;
+            background: #080808; border: 1px solid var(--gold-primary);
+            border-radius: 20px; overflow: hidden;
+            box-shadow: 0 0 80px rgba(212, 175, 55, 0.2);
+        }
+        
+        @media(max-width: 800px) { .modal-layout { flex-direction: column; height: 90vh; } }
+
+        /* Left Side: Media */
+        .modal-media-container {
+            flex: 2; background: #000; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; border-right: 1px solid #222;
+        }
+        .modal-media-container img, .modal-media-container video {
+            max-width: 100%; max-height: 100%; object-fit: contain;
+        }
+
+        /* Right Side: Details */
+        .modal-details {
+            flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center;
+            background: linear-gradient(135deg, #0a0a0a, #0f0f0f);
+            position: relative;
+        }
+        
+        .detail-title {
+            font-family: var(--font-royal); font-size: 2rem; color: var(--gold-primary);
+            margin-bottom: 10px; line-height: 1.2;
+        }
+        .detail-meta {
+            font-family: var(--font-modern); font-size: 0.9rem; color: #888;
+            margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 15px;
+        }
+        .meta-tag {
+            background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 4px;
+            border: 1px solid #333; font-size: 0.75rem; text-transform: uppercase;
+        }
+
+        /* Stat Grid */
+        .stat-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;
+        }
+        .stat-item h4 { color: #555; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 5px; }
+        .stat-item p { color: #fff; font-size: 1.1rem; font-family: var(--font-royal); }
+
+        /* Buttons */
+        .action-btn {
+            width: 100%; padding: 15px; border: none; border-radius: 8px;
+            font-family: var(--font-modern); font-weight: bold; text-transform: uppercase;
+            cursor: pointer; transition: 0.3s; margin-bottom: 10px; letter-spacing: 1px;
+        }
+        .btn-download {
+            background: var(--gold-primary); color: #000;
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+        .btn-download:hover { background: #fff; box-shadow: 0 0 30px #fff; }
+        
+        .btn-close {
+            background: transparent; border: 1px solid #333; color: #fff;
+        }
+        .btn-close:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
 
         @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+        /* Nav */
+        .top-nav { position: absolute; top: 25px; right: 40px; z-index: 100; display: flex; gap: 25px; }
+        .nav-link { 
+            color: #fff; text-decoration: none; font-size: 0.85rem; text-transform: uppercase;
+            letter-spacing: 2px; opacity: 0.6; transition: 0.3s; position: relative;
+        }
+        .nav-link.active, .nav-link:hover { opacity: 1; color: var(--gold-neon); text-shadow: 0 0 10px var(--gold-glow); }
 
     </style>
 </head>
 <body>
 
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+    <div class="particles"></div>
+
     <div class="top-nav">
-        <div class="nav-link active" onclick="setTab('wallpapers', this)">Gallery</div>
-        <div class="nav-link" onclick="setTab('videos', this)">Live Wallpaper</div>
+        <a href="#" class="nav-link active" onclick="setTab('wallpapers', this)">Gallery</a>
+        <a href="#" class="nav-link" onclick="setTab('videos', this)">Live Walls</a>
     </div>
 
     <section class="hero">
@@ -245,44 +286,73 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1>NeonPixel</h1>
-            <p class="subtitle">Royal Imperial Collection</p>
+            <p class="subtitle" style="letter-spacing: 6px; color: var(--gold-primary); text-transform: uppercase; font-size: 0.8rem;">Imperial Digital Artifacts</p>
         </div>
         
         <div class="search-container">
-            <div class="search-wrapper">
-                <input type="text" class="search-input" id="search" placeholder="Search the royal archives..." onkeyup="render()">
+            <div class="search-wrapper hover-target">
+                <input type="text" class="search-input" id="search" placeholder="Search the Royal Archives..." onkeyup="render()">
                 <i class="fa-solid fa-search search-icon"></i>
             </div>
         </div>
     </section>
 
-    <div class="banner-section">
-        <div class="banner-bg"></div>
-        <div class="banner-text">
-            <h3>Golden Week</h3>
-            <p>Exclusive 8K Gold & Dark Live Wallpapers</p>
-        </div>
-        <button class="banner-btn" onclick="setCat('Royal')">View Now</button>
+    <div class="showcase-bar hover-target">
+        <div class="showcase-overlay"></div>
+        <div class="showcase-badge">FEATURED</div>
+        <video class="showcase-video" autoplay muted loop playsinline>
+            <source src="Futuristic_Phone_Video_Generation.mp4" type="video/mp4">
+        </video>
     </div>
 
     <div class="filter-section">
-        <div class="scroll-row" id="mainCats">
-            </div>
-        <div class="scroll-row sub-scroll" id="subCats">
-            </div>
+        <div class="scroll-row" id="mainCats"></div>
+        <div class="scroll-row sub-scroll" id="subCats"></div>
     </div>
 
     <div class="gallery" id="grid"></div>
 
     <div class="modal" id="modal" onclick="if(event.target.id==='modal') closeModal()">
-        <div class="modal-content" id="m-preview"></div>
-        <div class="close-btn" onclick="closeModal()">Close Preview</div>
+        <div class="modal-layout">
+            
+            <div class="modal-media-container" id="m-preview"></div>
+            
+            <div class="modal-details">
+                <h2 class="detail-title" id="m-title">Artifact Title</h2>
+                <div class="detail-meta">
+                    <span class="meta-tag" id="m-cat">Category</span>
+                    <span class="meta-tag" id="m-type">Type</span>
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <h4>Resolution</h4>
+                        <p id="m-res">4K UHD</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>File Size</h4>
+                        <p id="m-size">12.5 MB</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>Format</h4>
+                        <p id="m-format">PNG</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>License</h4>
+                        <p>Personal</p>
+                    </div>
+                </div>
+
+                <a href="#" id="m-download" class="action-btn btn-download hover-target" download style="text-align:center; text-decoration:none; display:block;">Download Original</a>
+                <button class="action-btn btn-close hover-target" onclick="closeModal()">Close Viewer</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Data Structure
+        // --- DATA & CONFIG ---
         const SUB_MAP = {
-            "Anime": ["All", "Naruto", "One Piece", "Solo Leveling", "Jujutsu Kaisen"],
+            "Anime": ["All", "Naruto", "One Piece", "Solo Leveling", "Cyberpunk"],
             "Cars": ["All", "BMW", "Porsche", "JDM", "Lamborghini"],
             "Royal": ["All", "Gold", "Luxury", "Palace", "Dark Art"],
             "Neon": ["All", "Cyberpunk", "City", "Lights", "Abstract"],
@@ -290,110 +360,156 @@
         };
         const CATEGORIES = ["All", ...Object.keys(SUB_MAP)];
 
-        let state = {
-            tab: 'wallpapers', // 'wallpapers' or 'videos'
-            cat: 'All',
-            sub: 'All',
-            data: { wallpapers: [], videos: [] }
-        };
+        let state = { tab: 'wallpapers', cat: 'All', sub: 'All', data: { wallpapers: [], videos: [] } };
 
-        // Init
-        window.onload = async () => {
+        window.onload = () => {
+            initCursor();
             renderCats();
-            
-            // Mock Data Generator for Immediate Result
-            const generateMock = (type, count) => Array.from({length: count}, (_, i) => ({
-                src: type === 'img' ? `https://picsum.photos/600/${800 + i*10}?random=${i}` : "https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_25fps.mp4",
-                category: CATEGORIES[Math.floor(Math.random() * (CATEGORIES.length-1)) + 1],
-                subcategory: "General",
-                title: "Item " + i,
-                type: type === 'img' ? 'image' : 'video'
-            }));
-
-            // Try real fetch, fallback to mock
-            try {
-                // Keep your original fetch links here
-                state.data.wallpapers = generateMock('img', 15); 
-                state.data.videos = generateMock('video', 8);
-                render();
-            } catch(e) { console.error(e); }
+            generateMockData();
+            render();
         };
 
-        // Render Functions
+        // --- 1. MAGNETIC CURSOR & TILT ---
+        function initCursor() {
+            const dot = document.querySelector('.cursor-dot');
+            const circle = document.querySelector('.cursor-circle');
+            let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX; mouseY = e.clientY;
+                dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
+                const hoveredCard = e.target.closest('.card');
+                if(hoveredCard) applyTilt(hoveredCard, e);
+            });
+
+            function animateCursor() {
+                circleX += (mouseX - circleX) * 0.15;
+                circleY += (mouseY - circleY) * 0.15;
+                circle.style.left = circleX + 'px'; circle.style.top = circleY + 'px';
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            const observer = new MutationObserver(() => attachMagnetic());
+            observer.observe(document.body, { childList: true, subtree: true });
+        }
+
+        function attachMagnetic() {
+            const targets = document.querySelectorAll('button, a, input, .card, .hover-target, .oval-btn');
+            targets.forEach(el => {
+                el.onmouseenter = () => document.body.classList.add('hovering');
+                el.onmouseleave = () => {
+                    document.body.classList.remove('hovering');
+                    if(el.classList.contains('card')) el.style.transform = `perspective(1000px) rotateX(0) rotateY(0)`;
+                };
+            });
+        }
+
+        function applyTilt(card, e) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const xRot = -((y - rect.height/2) / rect.height) * 15;
+            const yRot = ((x - rect.width/2) / rect.width) * 15;
+            card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
+        }
+
+        // --- 2. RENDER LOGIC ---
+        function generateMockData() {
+            // Generates high-res placeholders with metadata
+            state.data.wallpapers = Array.from({length: 16}, (_, i) => ({
+                src: `https://picsum.photos/800/${1000 + (i % 5)*50}?random=${i}`,
+                category: CATEGORIES[Math.floor(Math.random() * (CATEGORIES.length-1)) + 1],
+                title: "Royal Artifact #" + (i+1),
+                res: Math.random() > 0.5 ? "3840 x 2160 (4K)" : "2560 x 1440 (2K)",
+                size: (Math.random() * 15 + 5).toFixed(1) + " MB",
+                type: 'image'
+            }));
+            state.data.videos = Array.from({length: 8}, (_, i) => ({
+                src: "https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_25fps.mp4",
+                category: CATEGORIES[Math.floor(Math.random() * (CATEGORIES.length-1)) + 1],
+                title: "Live Motion #" + (i+1),
+                res: "1920 x 1080 (HD)",
+                size: (Math.random() * 50 + 20).toFixed(1) + " MB",
+                type: 'video'
+            }));
+        }
+
         function render() {
             const grid = document.getElementById('grid');
             const source = state.tab === 'wallpapers' ? state.data.wallpapers : state.data.videos;
             const term = document.getElementById('search').value.toLowerCase();
-
             const filtered = source.filter(item => {
-                const catMatch = state.cat === 'All' || item.category === state.cat;
-                // Simple logic: if sub is All, ignore sub check, else match sub
-                // (For mock data I'm just checking Category mostly)
-                return catMatch; 
+                return (state.cat === 'All' || item.category === state.cat) && 
+                       (item.title.toLowerCase().includes(term));
             });
 
             grid.innerHTML = filtered.map((item, idx) => `
-                <div class="card" onclick='openModal(${JSON.stringify(item)})' style="animation: fadeIn 0.5s ease forwards ${idx*0.05}s; opacity:0">
-                    ${item.type === 'image' 
-                        ? `<img src="${item.src}" loading="lazy">` 
-                        : `<video src="${item.src}" muted loop onmouseenter="this.play()" onmouseleave="this.pause()"></video>`
-                    }
+                <div class="card" onclick='openModal(${JSON.stringify(item)})' 
+                     style="animation: fadeIn 0.6s ease forwards ${idx*0.05}s; opacity:0">
+                    <div class="card-inner">
+                        ${item.type === 'image' 
+                            ? `<img src="${item.src}" loading="lazy">` 
+                            : `<video src="${item.src}" muted loop onmouseenter="this.play()" onmouseleave="this.pause()"></video>`
+                        }
+                    </div>
                 </div>
             `).join('');
+            attachMagnetic();
         }
 
         function renderCats() {
-            const container = document.getElementById('mainCats');
-            container.innerHTML = CATEGORIES.map(cat => `
-                <button class="oval-btn ${state.cat === cat ? 'active' : ''}" 
-                        onclick="setCat('${cat}')">${cat}</button>
+            document.getElementById('mainCats').innerHTML = CATEGORIES.map(cat => `
+                <button class="oval-btn ${state.cat === cat ? 'active' : ''}" onclick="setCat('${cat}')">${cat}</button>
             `).join('');
             renderSubs();
         }
 
         function renderSubs() {
-            const container = document.getElementById('subCats');
-            if(state.cat === 'All' || !SUB_MAP[state.cat]) {
-                container.classList.remove('show');
-                return;
-            }
-            container.classList.add('show');
-            container.innerHTML = SUB_MAP[state.cat].map(sub => `
-                <button class="oval-btn sub ${state.sub === sub ? 'active' : ''}" 
-                        onclick="setSub('${sub}')">${sub}</button>
+            const c = document.getElementById('subCats');
+            if(state.cat === 'All' || !SUB_MAP[state.cat]) { c.classList.remove('show'); return; }
+            c.classList.add('show');
+            c.innerHTML = SUB_MAP[state.cat].map(s => `
+                <button class="oval-btn sub ${state.sub === s ? 'active' : ''}" onclick="setSub('${s}')">${s}</button>
             `).join('');
         }
 
-        // Logic
+        // --- ACTIONS ---
         function setTab(t, btn) {
             state.tab = t;
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
             btn.classList.add('active');
             render();
         }
-
-        function setCat(c) {
-            state.cat = c;
-            state.sub = 'All';
-            renderCats(); // Re-render to update active state
-            render();
-        }
-
-        function setSub(s) {
-            state.sub = s;
-            renderSubs(); // Re-render to update active state
-            render();
-        }
-
+        function setCat(c) { state.cat = c; state.sub = 'All'; renderCats(); render(); }
+        function setSub(s) { state.sub = s; renderSubs(); render(); }
+        
+        // --- NEW MODAL LOGIC ---
         function openModal(item) {
             const m = document.getElementById('modal');
-            const c = document.getElementById('m-preview');
-            c.innerHTML = item.type === 'image' 
+            const preview = document.getElementById('m-preview');
+            
+            // Populate Image/Video
+            preview.innerHTML = item.type === 'image' 
                 ? `<img src="${item.src}">` 
                 : `<video src="${item.src}" controls autoplay loop></video>`;
+
+            // Populate Metadata
+            document.getElementById('m-title').innerText = item.title;
+            document.getElementById('m-cat').innerText = item.category;
+            document.getElementById('m-type').innerText = item.type === 'image' ? "Still Image" : "Live Wallpaper";
+            document.getElementById('m-res').innerText = item.res;
+            document.getElementById('m-size').innerText = item.size;
+            document.getElementById('m-format').innerText = item.type === 'image' ? "JPG/PNG" : "MP4";
+            
+            // Update Download Link
+            const dlBtn = document.getElementById('m-download');
+            dlBtn.href = item.src;
+            dlBtn.innerText = "Download " + (item.type === 'image' ? "Image" : "Video");
+
             m.classList.add('active');
         }
-
+        
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
             setTimeout(() => document.getElementById('m-preview').innerHTML = '', 300);
