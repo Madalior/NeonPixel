@@ -1,5 +1,85 @@
 [
     {
+        "title": "Anime mobile",
+        "category": "Anime",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764399639/neonpixel/mobile/Anime/b2vgzcw5pzinitf9lp5b.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Nature mobile",
+        "category": "Nature",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764399642/neonpixel/mobile/Nature/gtczqfebkviyy0ybvq1w.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Gaming mobile",
+        "category": "Gaming",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764399644/neonpixel/mobile/Gaming/je12wazqea6ac6qe3tve.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Anime desktop",
+        "category": "Anime",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764399649/neonpixel/desktop/Anime/nbuqn6slgpms2fdvjpu2.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Cars desktop",
+        "category": "Cars",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764399651/neonpixel/desktop/Cars/ndu8q1lsqke1brmej87b.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Nature desktop",
+        "category": "Nature",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764399654/neonpixel/desktop/Nature/aoxhgo9z8iculmyfvhxu.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Gaming desktop",
+        "category": "Gaming",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764399656/neonpixel/desktop/Gaming/zv8ttqza7bgylbw8h3za.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Cyberpunk desktop",
+        "category": "Cyberpunk",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764399658/neonpixel/desktop/Cyberpunk/frpmuygloivdw0bzhfk7.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Abstract desktop",
+        "category": "Abstract",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764399660/neonpixel/desktop/Abstract/ipflk70p5dn7b7c6zjvg.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Technology desktop",
+        "category": "Technology",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764399662/neonpixel/desktop/Technology/kwfnlnrzccut6sivqgkd.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
         "title": "Anime Mobile",
         "category": "Anime",
         "device": "mobile",
