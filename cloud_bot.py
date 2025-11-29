@@ -11,10 +11,23 @@ import yt_dlp
 from github import Github
 
 # --- CONFIGURATION ---
-MAX_STORAGE_LIMIT = 20 * 1024 * 1024 * 1024  # 20 GB (Cloudinary Limit)
-MAX_RUNTIME_SECONDS = 5.5 * 60 * 60          # 5.5 Hours (GitHub Action Limit)
-CATEGORIES = ["Anime", "Cars", "Nature", "Gaming", "Cyberpunk", "Abstract", "Technology"]
-RELEASE_TAG = "video-assets"                 # Tag for GitHub Releases
+MAX_STORAGE_LIMIT = 20 * 1024 * 1024 * 1024
+MAX_RUNTIME_SECONDS = 5.5 * 60 * 60
+RELEASE_TAG = "video-assets"
+
+# Main Categories
+CATEGORIES = ["Anime", "Cars", "Nature", "Gaming", "Cyberpunk", "Abstract"]
+
+# --- SMART SUBCATEGORY LISTS ---
+# The bot will look for these words in tags/titles to create subcategories automatically
+SUB_KEYWORDS = {
+    "Anime": ["Naruto", "One Piece", "Dragon Ball", "Jujutsu Kaisen", "Demon Slayer", "Attack on Titan", "Bleach", "Ghibli", "Solo Leveling"],
+    "Cars": ["JDM", "BMW", "Porsche", "Ferrari", "Lamborghini", "GTR", "Toyota", "Audi", "Drift"],
+    "Gaming": ["Valorant", "League of Legends", "Elden Ring", "Genshin Impact", "Minecraft", "Cyberpunk 2077", "GTA"],
+    "Nature": ["Forest", "Ocean", "Mountain", "Rain", "Space", "Sunset", "Winter"],
+    "Cyberpunk": ["Neon", "City", "Robot", "Future", "Glitch"],
+    "Abstract": ["Fluid", "Geometric", "Dark", "Light", "Minimal"]
+}
 
 # Cloudinary Setup
 cloudinary.config(
@@ -23,175 +36,148 @@ cloudinary.config(
   api_secret = os.environ.get('CLOUDINARY_API_SECRET')
 )
 
-# --- 1. CHECK STORAGE ---
 def check_storage_space():
     try:
-        usage_data = cloudinary.api.usage()
-        current_usage = usage_data.get('storage', {}).get('usage', 0)
-        gb_used = round(current_usage / (1024 * 1024 * 1024), 2)
-        print(f"💾 Storage: {gb_used} GB / 20.0 GB")
-        
-        if current_usage >= MAX_STORAGE_LIMIT:
-            print("🛑 STORAGE FULL (20GB Reached). Stopping.")
-            return False 
+        usage = cloudinary.api.usage().get('storage', {}).get('usage', 0)
+        if usage >= MAX_STORAGE_LIMIT: return False 
         return True 
     except: return True 
 
-# --- 2. SAVE JSON ---
 def save_json(filepath, new_data, limit=500):
     os.makedirs("data", exist_ok=True)
-    existing_data = []
+    existing = []
     if os.path.exists(filepath):
-        try:
-            with open(filepath, "r") as f:
-                existing_data = json.load(f)
-        except: existing_data = []
-
-    if not os.path.exists(filepath) and not new_data:
-        with open(filepath, "w") as f: json.dump([], f)
-        return
-
+        try: existing = json.load(open(filepath, "r"))
+        except: pass
+    
     if new_data:
-        final_data = new_data + existing_data
-        # Remove duplicates
-        unique_data = {v['src']:v for v in final_data}.values()
-        final_list = list(unique_data)[:limit]
-        with open(filepath, "w") as f:
-            json.dump(final_list, f, indent=4)
-        print(f"✅ Updated {filepath} (+{len(new_data)} items)")
+        final = new_data + existing
+        unique = {v['src']:v for v in final}.values()
+        with open(filepath, "w") as f: json.dump(list(unique)[:limit], f, indent=4)
+        print(f"✅ Saved {filepath}")
 
-# --- 3. HELPER: GITHUB RELEASE UPLOAD ---
-def upload_to_github_release(filepath, filename):
+def upload_to_github(filepath, filename):
     try:
-        token = os.environ.get("GITHUB_TOKEN")
-        repo_name = os.environ.get("GITHUB_REPOSITORY")
-        g = Github(token)
-        repo = g.get_repo(repo_name)
-        
-        try:
-            release = repo.get_release(RELEASE_TAG)
-        except:
-            print(f"   ✨ Creating Release: {RELEASE_TAG}...")
-            release = repo.create_git_release(RELEASE_TAG, "Video Assets", "Storage", prerelease=True)
-
+        g = Github(os.environ.get("GITHUB_TOKEN"))
+        repo = g.get_repo(os.environ.get("GITHUB_REPOSITORY"))
+        try: release = repo.get_release(RELEASE_TAG)
+        except: release = repo.create_git_release(RELEASE_TAG, "Assets", "Storage", prerelease=True)
         print(f"   📤 Uploading {filename} to GitHub...")
         asset = release.upload_asset(filepath, name=filename)
         return asset.browser_download_url
-    except Exception as e:
-        print(f"   ❌ GitHub Error: {e}")
-        return None
+    except: return None
 
-# --- 4. WALLHAVEN BATCH (Images -> Cloudinary) ---
+# --- INTELLIGENT TAGGER ---
+def detect_subcategory(main_cat, text_to_scan):
+    # Convert text to lowercase for matching
+    text = text_to_scan.lower()
+    
+    # Check if we have keywords for this category
+    if main_cat in SUB_KEYWORDS:
+        for keyword in SUB_KEYWORDS[main_cat]:
+            if keyword.lower() in text:
+                return keyword # Found a match! (e.g. "Naruto")
+    
+    return "General" # No match found
+
+# --- 1. WALLHAVEN (Images) ---
 def download_wallhaven_batch():
     api_key = os.environ.get('WALLHAVEN_API_KEY')
     new_items = []
-    
-    # Pick RANDOM category and device to keep mixing content
     cat = random.choice(CATEGORIES)
     device = random.choice(["mobile", "desktop"])
     ratio = "9x16" if device == "mobile" else "16x9"
     
-    print(f"🐉 Fetching Wallhaven: {cat} ({device})...")
-    
+    print(f"🐉 Wallhaven: {cat} ({device})...")
     try:
         url = "https://wallhaven.cc/api/v1/search"
         params = {"q": cat, "purity": "100", "sorting": "random", "ratios": ratio, "apikey": api_key}
         resp = requests.get(url, params=params).json()
         
-        if "data" in resp and len(resp["data"]) > 0:
-            img = resp["data"][0] # Take the first random result
-            print(f"   🚀 Uploading {cat}...")
+        if "data" in resp and resp["data"]:
+            img_data = resp["data"][0]
             
-            res = cloudinary.uploader.upload(img["path"], folder=f"neonpixel/{device}/{cat}", tags=[cat, device])
+            # --- AUTO CATEGORIZATION ---
+            # Wallhaven provides 'tags'. We join them into a string to scan.
+            tags_list = [t['name'] for t in img_data.get('tags', [])]
+            tag_text = " ".join(tags_list)
+            sub_cat = detect_subcategory(cat, tag_text)
+            
+            print(f"   🚀 Uploading {sub_cat} ({cat})...")
+            res = cloudinary.uploader.upload(img_data["path"], folder=f"neonpixel/{device}/{cat}", tags=[cat, sub_cat])
             
             new_items.append({
-                "title": f"{cat} {device}", 
-                "category": cat, 
+                "title": f"{sub_cat} Wallpaper", 
+                "category": cat,
+                "subcategory": sub_cat, # <--- NEW FIELD
                 "device": device, 
                 "src": res['secure_url'], 
                 "type": "image", 
                 "res": "4K"
             })
-    except Exception as e:
-        print(f"   ❌ Wallhaven Error: {e}")
-        
+    except Exception as e: print(f"Error: {e}")
     return new_items
 
-# --- 5. PINTEREST BATCH (Videos -> GitHub Releases) ---
-def download_pinterest_batch():
-    print("📌 Hunting Pinterest Video...")
+# --- 2. PINTEREST/YOUTUBE (Videos) ---
+def download_video_batch():
+    print("📌 Hunting Video...")
     new_items = []
     ddgs = DDGS()
-    temp_file = "temp_vid.mp4"
-    ydl_opts = {'format': 'best', 'outtmpl': temp_file, 'quiet': True}
-    
+    ydl_opts = {'format': 'best[ext=mp4]', 'outtmpl': 'temp.mp4', 'quiet': True}
     cat = random.choice(CATEGORIES)
     
     try:
-        # Search DuckDuckGo
-        query = f"site:pinterest.com/pin/ {cat} aesthetic video vertical {random.randint(1, 1000)}"
+        # We search specifically for subcategories to ensure variety
+        # If cat is Anime, we search "Anime Naruto Video", etc.
+        search_term = cat
+        if cat in SUB_KEYWORDS:
+            search_term = f"{cat} {random.choice(SUB_KEYWORDS[cat])}"
+
+        query = f"site:youtube.com/shorts {search_term} aesthetic 4k vertical"
         results = list(ddgs.text(query, max_results=1))
         
         if results:
-            pin_url = results[0]['href']
-            print(f"   🔍 Found Pin: {pin_url}")
+            vid_url = results[0]['href']
+            title = results[0]['title']
             
-            # Download locally first
-            if os.path.exists(temp_file): os.remove(temp_file)
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl.extract_info(pin_url, download=True)
+            # Detect Subcategory from Title
+            sub_cat = detect_subcategory(cat, title)
             
-            if os.path.exists(temp_file):
-                unique_name = f"{cat}_{random.randint(10000,99999)}.mp4"
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl: ydl.extract_info(vid_url, download=True)
+            
+            if os.path.exists("temp.mp4"):
+                unique = f"{cat}_{random.randint(1000,9999)}.mp4"
+                dl_url = upload_to_github_release("temp.mp4", unique)
                 
-                # Upload to GitHub (Unlimited Storage)
-                download_url = upload_to_github_release(temp_file, unique_name)
-                
-                if download_url:
+                if dl_url:
                     new_items.append({
-                        "title": f"{cat} Live", 
+                        "title": f"{sub_cat} Live", 
                         "category": cat, 
+                        "subcategory": sub_cat, # <--- NEW FIELD
                         "device": "mobile", 
-                        "src": download_url, 
+                        "src": dl_url, 
                         "type": "video", 
                         "res": "HD"
                     })
-                
-                # Cleanup
-                os.remove(temp_file)
-    except Exception as e:
-        print(f"   ⚠️ Pinterest Skip: {e}")
-        
+                os.remove("temp.mp4")
+    except: pass
     return new_items
 
-# --- MAIN LOOP ---
+# --- LOOP ---
 if __name__ == "__main__":
-    start_time = time.time()
-    batch_count = 0
-    
-    print("🤖 STARTING ENDLESS DOWNLOAD LOOP...")
-    
+    start = time.time()
+    count = 0
+    print("🤖 STARTING SMART SORTING...")
     while True:
-        # 1. Check Time Limit (Stop before GitHub kills us)
-        elapsed = time.time() - start_time
-        if elapsed > MAX_RUNTIME_SECONDS:
-            print("⏰ Time Limit Reached (5.5 Hours). Stopping.")
-            break
-            
-        # 2. Check Cloudinary Storage (Stop if 20GB full)
-        if not check_storage_space():
-            break
-            
-        # 3. Download Logic
-        # Always try images (Wallhaven)
-        images = download_wallhaven_batch()
-        if images: save_json("data/cloud_wallpapers.json", images, 500)
+        if time.time() - start > MAX_RUNTIME_SECONDS: break
+        if not check_storage_space(): break
         
-        # Try videos every 3rd loop (to save bandwidth/time)
-        if batch_count % 3 == 0:
-            videos = download_pinterest_batch()
-            if videos: save_json("data/videos.json", videos, 100)
+        imgs = download_wallhaven_batch()
+        if imgs: save_json("data/cloud_wallpapers.json", imgs, 500)
         
-        batch_count += 1
-        print(f"💤 Sleeping 15s... (Batch {batch_count} done)")
-        time.sleep(15) # Safety delay
+        if count % 3 == 0:
+            vids = download_video_batch()
+            if vids: save_json("data/videos.json", vids, 100)
+        
+        count += 1
+        time.sleep(15)
