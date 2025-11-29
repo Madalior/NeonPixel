@@ -50,6 +50,6 @@ jobs:
           git add data/cloud_wallpapers.json data/videos.json
           git commit -m "🤖 AI Auto-Update: New Assets" || echo "No changes to commit"
           
-          # --- THE MAGIC FIX IS HERE ---
+          # --- THE FIX IS HERE ---
           git pull --rebase
           git push
