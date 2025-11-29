@@ -2,14 +2,14 @@ name: Auto Update NeonPixel
 
 on:
   schedule:
-    - cron: "0 */12 * * *"   # Runs every 12 hours
-  workflow_dispatch:         # Allows manual run button
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write        # PERMISSION FIX: Allows bot to save JSON files
+      contents: write
     
     steps:
       - name: Checkout Code
@@ -37,8 +37,7 @@ jobs:
           git config --global user.name "NeonPixel AI"
           git config --global user.email "bot@neonpixel.com"
           
-          # --- SAFETY NET ---
-          # If bot failed to create files, create empty ones to prevent Git crash
+          # Safety Net
           if [ ! -f data/cloud_wallpapers.json ]; then
             mkdir -p data
             echo "[]" > data/cloud_wallpapers.json
@@ -50,4 +49,7 @@ jobs:
           
           git add data/cloud_wallpapers.json data/videos.json
           git commit -m "🤖 AI Auto-Update: New Assets" || echo "No changes to commit"
+          
+          # --- THE MAGIC FIX IS HERE ---
+          git pull --rebase
           git push
