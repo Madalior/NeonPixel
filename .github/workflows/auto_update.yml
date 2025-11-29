@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write        # Critical: Allows creating Releases & Uploading
+      contents: write        # Critical for saving files
     
     steps:
       - name: Checkout Code
@@ -26,14 +26,16 @@ jobs:
       - name: Install FFmpeg
         run: sudo apt-get install -y ffmpeg
 
+      # --- FIX IS HERE: Pull latest changes BEFORE running the bot ---
+      - name: Sync with GitHub
+        run: git pull origin main || echo "Nothing to pull"
+
       - name: Run AI Cloud Bot
         env:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
           WALLHAVEN_API_KEY: ${{ secrets.WALLHAVEN_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatically provided by GitHub
-          GITHUB_REPOSITORY: ${{ github.repository }} # Automatically provided
         run: python cloud_bot.py
 
       - name: Commit & Push Changes
@@ -41,7 +43,7 @@ jobs:
           git config --global user.name "NeonPixel AI"
           git config --global user.email "bot@neonpixel.com"
           
-          # Safety Net
+          # Safety Net: Create files if they are missing
           if [ ! -f data/cloud_wallpapers.json ]; then
             mkdir -p data
             echo "[]" > data/cloud_wallpapers.json
@@ -52,7 +54,9 @@ jobs:
           fi
           
           git add data/cloud_wallpapers.json data/videos.json
-          git commit -m "🤖 AI Auto-Update: New Assets" || echo "No changes to commit"
           
-          git pull --rebase
-          git push
+          # Only commit if there are actual changes
+          git diff-index --quiet HEAD || git commit -m "🤖 AI Auto-Update: New Assets"
+          
+          # Force push to resolve any remaining conflicts
+          git push origin main
