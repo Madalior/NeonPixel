@@ -1,2 +1,5 @@
 requests
 cloudinary
+yt-dlp
+duckduckgo-search
+PyGithub
