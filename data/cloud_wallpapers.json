@@ -1,1 +1,74 @@
-
+[
+    {
+        "title": "Nature mobile",
+        "category": "Nature",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400847/neonpixel/mobile/Nature/gq8wmhrkx9wrm7gmw2n6.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Gaming mobile",
+        "category": "Gaming",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400849/neonpixel/mobile/Gaming/xhoujcdajgsjpp4cotdj.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Anime desktop",
+        "category": "Anime",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400854/neonpixel/desktop/Anime/abeljgzcqs68h9iflg0m.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Cars desktop",
+        "category": "Cars",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400856/neonpixel/desktop/Cars/lnjhdbvgbzqdrm8biu8q.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Nature desktop",
+        "category": "Nature",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400858/neonpixel/desktop/Nature/tgnjnkwpcmvkvwiyyvpn.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Gaming desktop",
+        "category": "Gaming",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400860/neonpixel/desktop/Gaming/fu6yy6ofpvtt78idxbin.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Cyberpunk desktop",
+        "category": "Cyberpunk",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400862/neonpixel/desktop/Cyberpunk/kmj5mrchaihaw5mfzsok.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Abstract desktop",
+        "category": "Abstract",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400863/neonpixel/desktop/Abstract/qn9mnajqehwbny8q1kj9.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Technology desktop",
+        "category": "Technology",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400865/neonpixel/desktop/Technology/sej48t3v6bajxs9aaccv.png",
+        "type": "image",
+        "res": "4K"
+    }
+]
