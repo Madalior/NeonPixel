@@ -3,336 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeonPixel | 4K Aesthetic Wallpapers</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>NeonPixel | Smart Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. MODERN VARIABLES --- */
-        :root {
-            --bg-main: #050505;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --accent: #00f2ea;
-            --accent-gradient: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
-            --text-main: #ffffff;
-            --text-sec: #888888;
-            --radius: 12px;
-        }
-
+        :root { --bg: #0a0a0a; --card: #141414; --accent: #00FFFF; --text: #fff; --text-dim: #888; }
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        nav { position: fixed; top: 0; width: 100%; height: 70px; background: rgba(10,10,10,0.9); backdrop-filter: blur(10px); z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .logo { font-size: 1.5rem; font-weight: 700; } .logo span { color: var(--accent); }
+        .nav-tabs { display: flex; gap: 10px; }
+        .tab-btn { background: transparent; border: 1px solid #333; color: var(--text-dim); padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: var(--text); color: #000; font-weight: 700; border-color: var(--text); }
+
+        .hero { padding-top: 100px; text-align: center; padding-bottom: 20px; }
+        .device-switch { display: inline-flex; background: var(--card); padding: 5px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #333; }
+        .dev-btn { padding: 10px 20px; background: transparent; border: none; color: var(--text-dim); cursor: pointer; border-radius: 8px; display: flex; gap: 8px; align-items: center; transition: 0.3s; }
+        .dev-btn.active { background: var(--accent); color: #000; font-weight: 700; }
+
+        /* CATEGORIES & SUBCATEGORIES */
+        .cat-row { display: flex; gap: 10px; overflow-x: auto; padding: 10px 5%; scrollbar-width: none; justify-content: center; }
+        .cat-chip { white-space: nowrap; padding: 8px 20px; border-radius: 30px; background: var(--card); border: 1px solid #333; color: var(--text-dim); cursor: pointer; transition: 0.3s; }
+        .cat-chip.active { border-color: var(--accent); color: var(--accent); }
         
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            overflow-x: hidden;
-        }
+        .sub-cat-row { display: flex; gap: 8px; overflow-x: auto; padding: 5px 5%; justify-content: center; min-height: 40px; margin-bottom: 20px; opacity: 0; transition: 0.3s; transform: translateY(-10px); display: none; }
+        .sub-cat-row.show { opacity: 1; transform: translateY(0); display: flex; }
+        .sub-chip { font-size: 0.85rem; padding: 5px 15px; border-radius: 20px; background: rgba(255,255,255,0.05); cursor: pointer; border: 1px solid transparent; }
+        .sub-chip:hover { background: rgba(255,255,255,0.1); }
+        .sub-chip.active { background: var(--accent); color: #000; font-weight: 600; }
 
-        /* --- 2. HEADER & NAV --- */
-        nav {
-            position: fixed; top: 0; left: 0; width: 100%; height: 70px;
-            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px);
-            z-index: 100; border-bottom: 1px solid var(--glass-border);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%;
-        }
-
-        .logo {
-            font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700;
-            background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-tabs {
-            display: flex; gap: 5px; background: var(--glass); 
-            padding: 5px; border-radius: 50px; border: 1px solid var(--glass-border);
-        }
-
-        .tab-btn {
-            background: transparent; border: none; color: var(--text-sec);
-            padding: 8px 20px; border-radius: 40px; font-weight: 500; cursor: pointer;
-            transition: 0.3s ease; font-size: 0.9rem;
-        }
-
-        .tab-btn.active { background: rgba(255,255,255,0.1); color: white; }
-
-        /* --- 3. HERO SECTION --- */
-        .hero {
-            padding: 120px 20px 40px; text-align: center;
-            background: radial-gradient(circle at 50% 0%, rgba(0, 242, 234, 0.15) 0%, transparent 50%);
-        }
-
-        h1 { font-family: 'Outfit', sans-serif; font-size: 3rem; margin-bottom: 10px; }
-        p.subtitle { color: var(--text-sec); max-width: 500px; margin: 0 auto 30px; line-height: 1.6; }
-
-        /* Device Switcher */
-        .switch-container {
-            display: inline-flex; background: var(--glass); border-radius: 12px;
-            padding: 4px; border: 1px solid var(--glass-border); margin-bottom: 30px;
-        }
-        .switch-btn {
-            padding: 10px 24px; border: none; background: transparent; color: var(--text-sec);
-            border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;
-            transition: 0.3s;
-        }
-        .switch-btn.active { background: var(--text-main); color: #000; }
-        .switch-btn:hover:not(.active) { color: white; }
-
-        /* Search */
-        .search-box {
-            position: relative; max-width: 400px; margin: 0 auto 40px;
-        }
-        .search-box input {
-            width: 100%; background: var(--glass); border: 1px solid var(--glass-border);
-            padding: 16px 50px; border-radius: 50px; color: white; font-size: 1rem;
-            transition: 0.3s;
-        }
-        .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 20px rgba(0, 242, 234, 0.1); }
-        .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-sec); }
-
-        /* Categories */
-        .cats-wrapper {
-            display: flex; gap: 10px; overflow-x: auto; padding: 10px 5%;
-            scrollbar-width: none; justify-content: center; margin-bottom: 20px;
-        }
-        .cat-pill {
-            white-space: nowrap; padding: 8px 18px; border-radius: 30px;
-            background: var(--glass); border: 1px solid var(--glass-border);
-            color: var(--text-sec); cursor: pointer; font-size: 0.9rem; transition: 0.3s;
-        }
-        .cat-pill:hover { border-color: var(--accent); color: white; }
-        .cat-pill.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
-
-        /* --- 4. WALLPAPER GRID --- */
-        .gallery {
-            column-count: 4; column-gap: 20px; padding: 20px 5%;
-        }
-        @media(max-width: 1200px) { .gallery { column-count: 3; } }
-        @media(max-width: 768px) { .gallery { column-count: 2; } }
-        @media(max-width: 500px) { .gallery { column-count: 1; } }
-
-        .card {
-            break-inside: avoid; margin-bottom: 20px; position: relative;
-            border-radius: var(--radius); overflow: hidden; background: #111;
-            cursor: zoom-in; transition: transform 0.3s ease;
-        }
-        .card:hover { transform: translateY(-5px); }
+        .grid { column-count: 4; column-gap: 15px; padding: 0 5%; }
+        @media(max-width: 1000px) { .grid { column-count: 2; } }
+        @media(max-width: 600px) { .grid { column-count: 1; } }
         
-        .card img, .card video {
-            width: 100%; display: block;
-            transition: opacity 0.3s;
-        }
-        
-        .card-overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            opacity: 0; transition: 0.3s;
-        }
-        .card:hover .card-overlay { opacity: 1; }
-        
-        .tag {
-            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;
-            color: var(--accent); font-weight: 700;
-        }
+        .card { break-inside: avoid; margin-bottom: 15px; border-radius: 10px; overflow: hidden; position: relative; cursor: pointer; background: #111; }
+        .card img, .card video { width: 100%; display: block; }
+        .overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); }
+        .sub-tag { font-size: 0.7rem; background: var(--accent); color: #000; padding: 2px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
 
-        /* --- 5. MODAL --- */
-        .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 1000; display: none;
-            justify-content: center; align-items: center; opacity: 0; transition: 0.3s;
-        }
-        .modal.active { display: flex; opacity: 1; }
-        
-        .modal-inner {
-            max-width: 90%; max-height: 90vh; position: relative; text-align: center;
-        }
-        .modal-inner img, .modal-inner video {
-            max-height: 80vh; max-width: 100%; border-radius: 8px;
-            box-shadow: 0 0 50px rgba(0, 242, 234, 0.1);
-        }
-        
-        .action-row {
-            margin-top: 20px; display: flex; justify-content: center; gap: 20px;
-        }
-        .dl-btn {
-            background: white; color: black; padding: 12px 30px;
-            text-decoration: none; border-radius: 50px; font-weight: 700;
-            display: inline-flex; align-items: center; gap: 10px;
-            transition: 0.2s;
-        }
-        .dl-btn:hover { transform: scale(1.05); background: var(--accent); }
-        .close-btn {
-            position: absolute; top: -50px; right: 0; font-size: 2rem;
-            color: white; cursor: pointer; opacity: 0.7;
-        }
-        .close-btn:hover { opacity: 1; }
-
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: none; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { max-width: 90%; max-height: 90%; text-align: center; }
+        .modal-content img, .modal-content video { max-height: 80vh; max-width: 100%; border-radius: 10px; }
+        .dl-btn { display: inline-block; margin-top: 20px; padding: 10px 30px; background: var(--accent); color: #000; text-decoration: none; border-radius: 50px; font-weight: 700; }
+        .close { position: absolute; top: 20px; right: 20px; font-size: 2rem; color: #fff; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">NeonPixel</div>
+        <div class="logo">Neon<span>Pixel</span></div>
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('wallpapers')">Photos</button>
-            <button class="tab-btn" onclick="switchTab('videos')">Live Loops</button>
+            <button class="tab-btn active" onclick="setTab('wallpapers')">Photos</button>
+            <button class="tab-btn" onclick="setTab('videos')">Loops</button>
         </div>
     </nav>
 
     <div class="hero">
-        <h1>Digital Art for Your Screen</h1>
-        <p class="subtitle">Curated 4K wallpapers. Updated automatically by AI.</p>
-
-        <div class="switch-container">
-            <button class="switch-btn active" id="btn-mobile" onclick="setDevice('mobile')">
-                <i class="fa-solid fa-mobile-screen"></i> Mobile
-            </button>
-            <button class="switch-btn" id="btn-desktop" onclick="setDevice('desktop')">
-                <i class="fa-solid fa-desktop"></i> Desktop
-            </button>
-        </div>
-
-        <div class="search-box">
-            <i class="fa-solid fa-search search-icon"></i>
-            <input type="text" id="searchInput" placeholder="Search anime, cars, cyber..." onkeyup="render()">
+        <div class="device-switch">
+            <button class="dev-btn active" id="d-mobile" onclick="setDevice('mobile')"><i class="fa-solid fa-mobile"></i> Mobile</button>
+            <button class="dev-btn" id="d-desktop" onclick="setDevice('desktop')"><i class="fa-solid fa-desktop"></i> Desktop</button>
         </div>
     </div>
 
-    <div class="cats-wrapper" id="catList"></div>
+    <div class="cat-row" id="mainCats"></div>
+    
+    <div class="sub-cat-row" id="subCats"></div>
 
-    <div class="gallery" id="grid"></div>
+    <div class="grid" id="grid"></div>
 
     <div class="modal" id="modal">
-        <div class="modal-inner">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <div id="modalContent"></div>
-            <div class="action-row">
-                <a href="#" id="dlLink" class="dl-btn" target="_blank" download>
-                    <i class="fa-solid fa-download"></i> Download 4K
-                </a>
-            </div>
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <div id="m-preview"></div>
+            <a href="#" id="m-dl" class="dl-btn" download target="_blank">Download</a>
         </div>
     </div>
 
     <script>
-        // --- STATE ---
-        let dbPhotos = [], dbVideos = [];
-        let curTab = 'wallpapers';
-        let curDevice = 'mobile';
-        let curCat = 'All';
-        const cats = ["All", "Anime", "Cars", "Nature", "Gaming", "Cyberpunk", "Abstract", "Technology"];
+        let data = { wallpapers: [], videos: [] };
+        let state = { tab: 'wallpapers', device: 'mobile', cat: 'All', sub: 'All' };
+        
+        // Define known subcategories for the UI
+        const SUB_MAP = {
+            "Anime": ["All", "Naruto", "One Piece", "Dragon Ball", "Jujutsu Kaisen", "Demon Slayer", "Solo Leveling", "Ghibli"],
+            "Cars": ["All", "JDM", "BMW", "Porsche", "Ferrari", "GTR", "Toyota", "Audi", "Drift"],
+            "Gaming": ["All", "Valorant", "League of Legends", "Elden Ring", "Genshin Impact", "Minecraft", "Cyberpunk 2077", "GTA"],
+            "Nature": ["All", "Forest", "Ocean", "Mountain", "Space", "Sunset", "Winter", "Rain"],
+            "Cyberpunk": ["All", "Neon", "City", "Robot", "Future", "Glitch"],
+            "Abstract": ["All", "Fluid", "Geometric", "Dark", "Light", "Minimal"]
+        };
+        const MAIN_CATS = ["All", ...Object.keys(SUB_MAP)];
 
-        // --- INIT ---
-        window.addEventListener('DOMContentLoaded', async () => {
+        window.onload = async () => {
             renderCats();
-            
-            // Load Data
             try {
-                const [pRes, vRes] = await Promise.all([
-                    fetch("data/cloud_wallpapers.json"),
-                    fetch("data/videos.json")
+                const [w, v] = await Promise.all([
+                    fetch("data/cloud_wallpapers.json").then(r=>r.json()), 
+                    fetch("data/videos.json").then(r=>r.json())
                 ]);
                 
-                if (pRes.ok) dbPhotos = await pRes.json();
-                if (vRes.ok) dbVideos = await vRes.json();
-                
-                // Fix old data that might miss "device" tag
-                dbPhotos = dbPhotos.map(i => ({ ...i, device: i.device || 'mobile' }));
-                dbVideos = dbVideos.map(i => ({ ...i, device: 'mobile' })); // Videos mostly vertical
-
+                // Map data and assign "General" if subcategory is missing
+                data.wallpapers = w.map(i => ({
+                    ...i, 
+                    subcategory: i.subcategory || "General", 
+                    device: i.device || "mobile"
+                }));
+                data.videos = v.map(i => ({
+                    ...i, 
+                    subcategory: i.subcategory || "General", 
+                    device: "mobile"
+                }));
                 render();
-            } catch (e) { console.log("Loading...", e); }
-        });
+            } catch(e) { console.log(e); }
+        };
 
-        // --- RENDER LOGIC ---
         function render() {
             const grid = document.getElementById('grid');
-            const search = document.getElementById('searchInput').value.toLowerCase();
+            const source = state.tab === 'wallpapers' ? data.wallpapers : data.videos;
             
-            // Choose Source
-            let data = (curTab === 'wallpapers') ? dbPhotos : dbVideos;
-
-            // Filter
-            let filtered = data.filter(item => {
-                let matchDev = (curTab === 'videos') ? true : (item.device === curDevice);
-                let matchCat = (curCat === 'All') || (item.category === curCat);
-                let matchSearch = item.title.toLowerCase().includes(search);
-                return matchDev && matchCat && matchSearch;
+            const filtered = source.filter(item => {
+                const devMatch = (state.tab === 'videos') ? true : (item.device === state.device);
+                const catMatch = (state.cat === 'All') || (item.category === state.cat);
+                // Smart Filter: If sub is "All", show everything in main cat. Else match specific sub.
+                const subMatch = (state.sub === 'All') || (item.subcategory === state.sub);
+                return devMatch && catMatch && subMatch;
             });
 
-            // HTML
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div style="text-align:center; grid-column:1/-1; padding:40px; color:#555;">No results found.</div>`;
-                return;
-            }
+            if(!filtered.length) { grid.innerHTML = `<p style="text-align:center;width:100%;color:#888;">No results found.</p>`; return; }
 
             grid.innerHTML = filtered.map(item => `
                 <div class="card fade-in" onclick='openModal(${JSON.stringify(item)})'>
                     ${item.type === 'image' 
-                        ? `<img src="${item.src.replace('/upload/', '/upload/w_500,f_auto,q_auto/')}" loading="lazy" alt="${item.title}">` 
+                        ? `<img src="${item.src.replace('/upload/', '/upload/w_500,f_auto,q_auto/')}" loading="lazy">` 
                         : `<video src="${item.src}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`
                     }
-                    <div class="card-overlay">
-                        <div class="tag">${item.category}</div>
+                    <div class="overlay">
+                        <span class="sub-tag">${item.subcategory}</span>
                     </div>
                 </div>
             `).join('');
         }
 
-        // --- CONTROLS ---
-        function setDevice(dev) {
-            curDevice = dev;
-            document.getElementById('btn-mobile').className = `switch-btn ${dev==='mobile'?'active':''}`;
-            document.getElementById('btn-desktop').className = `switch-btn ${dev==='desktop'?'active':''}`;
-            render();
-        }
-
-        function switchTab(tab) {
-            curTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            render();
-        }
-
-        function setCat(cat) {
-            curCat = cat;
-            renderCats();
-            render();
-        }
-
+        // --- UI LOGIC ---
         function renderCats() {
-            document.getElementById('catList').innerHTML = cats.map(c => `
-                <div class="cat-pill ${c === curCat ? 'active' : ''}" onclick="setCat('${c}')">${c}</div>
+            const c = document.getElementById('mainCats');
+            c.innerHTML = MAIN_CATS.map(cat => `
+                <div class="cat-chip ${cat === state.cat ? 'active' : ''}" onclick="setCat('${cat}')">${cat}</div>
+            `).join('');
+            renderSubCats();
+        }
+
+        function renderSubCats() {
+            const sc = document.getElementById('subCats');
+            if (state.cat === 'All' || !SUB_MAP[state.cat]) {
+                sc.className = "sub-cat-row"; // Hide if All or unknown
+                return;
+            }
+            sc.className = "sub-cat-row show"; // Show
+            sc.innerHTML = SUB_MAP[state.cat].map(sub => `
+                <div class="sub-chip ${sub === state.sub ? 'active' : ''}" onclick="setSub('${sub}')">${sub}</div>
             `).join('');
         }
 
-        // --- MODAL ---
-        function openModal(item) {
-            const modal = document.getElementById('modal');
-            const content = document.getElementById('modalContent');
-            const btn = document.getElementById('dlLink');
-
-            if (item.type === 'image') {
-                content.innerHTML = `<img src="${item.src}" alt="${item.title}">`;
-            } else {
-                content.innerHTML = `<video src="${item.src}" controls autoplay loop></video>`;
-            }
-            
-            btn.href = item.src; // Direct download link
-            modal.classList.add('active');
+        function setTab(t) { 
+            state.tab = t; 
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            render(); 
         }
+        function setDevice(d) {
+            state.device = d;
+            document.getElementById('d-mobile').className = `dev-btn ${d==='mobile'?'active':''}`;
+            document.getElementById('d-desktop').className = `dev-btn ${d==='desktop'?'active':''}`;
+            render();
+        }
+        function setCat(c) { state.cat = c; state.sub = 'All'; renderCats(); render(); }
+        function setSub(s) { state.sub = s; renderSubCats(); render(); }
 
+        function openModal(item) {
+            const m = document.getElementById('modal');
+            const p = document.getElementById('m-preview');
+            const d = document.getElementById('m-dl');
+            p.innerHTML = item.type === 'image' ? `<img src="${item.src}">` : `<video src="${item.src}" controls autoplay loop></video>`;
+            d.href = item.src;
+            m.classList.add('active');
+        }
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
-            setTimeout(() => document.getElementById('modalContent').innerHTML = '', 300);
+            document.getElementById('m-preview').innerHTML = '';
         }
-        
-        // Close on background click
-        document.getElementById('modal').addEventListener('click', (e) => {
-            if (e.target.id === 'modal') closeModal();
-        });
+        document.getElementById('modal').addEventListener('click', (e) => { if(e.target.id === 'modal') closeModal(); });
 
     </script>
 </body>
