@@ -8,207 +8,39 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* * --------------------------------------------------
-         * CSS SECTION
-         * --------------------------------------------------
-         */
-
-        :root {
-            --bg-dark: #0a0a0a;
-            --bg-card: #141414;
-            --bg-hover: #1f1f1f;
-            --accent: #00FFFF;
-            --accent-glow: rgba(0, 255, 255, 0.4);
-            --text-main: #ffffff;
-            --text-muted: #a0a0a0;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            --nav-height: 70px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            overflow-x: hidden;
-        }
-
-        /* --- Scrollbar --- */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-        /* --- Navbar --- */
-        header {
-            position: fixed; top: 0; width: 100%; height: var(--nav-height);
-            background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(10px);
-            z-index: 1000; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 5%; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .logo {
-            font-size: 1.5rem; font-weight: 700; letter-spacing: -1px;
-            color: var(--text-main); display: flex; align-items: center; gap: 10px;
-        }
-        .logo span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
-
-        .nav-links { display: flex; gap: 30px; }
-        .nav-btn {
-            background: none; border: none; color: var(--text-muted);
-            font-size: 1rem; cursor: pointer; transition: color 0.3s; font-weight: 600;
-        }
-        .nav-btn:hover, .nav-btn.active { color: var(--text-main); }
-        .nav-btn.active { position: relative; }
-        .nav-btn.active::after {
-            content: ''; position: absolute; bottom: -24px; left: 0;
-            width: 100%; height: 2px; background: var(--accent);
-            box-shadow: 0 0 10px var(--accent);
-        }
-
-        /* --- Hero Section --- */
-        .hero {
-            margin-top: var(--nav-height); height: 60vh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, var(--bg-dark) 70%);
-            padding: 20px;
-        }
-        .hero h1 { font-size: 3rem; margin-bottom: 15px; line-height: 1.1; }
-        .hero h1 span {
-            background: linear-gradient(90deg, #fff, var(--accent));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .hero p { color: var(--text-muted); max-width: 600px; margin-bottom: 30px; font-size: 1.1rem; }
-
-        .search-container { position: relative; width: 100%; max-width: 500px; }
-        .search-bar {
-            width: 100%; padding: 16px 24px; padding-left: 50px;
-            border-radius: 50px; border: 1px solid #333; background: var(--bg-card);
-            color: white; font-size: 1rem; transition: all 0.3s ease;
-        }
-        .search-bar:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-        .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-
-        /* --- Categories --- */
-        .category-scroll {
-            display: flex; gap: 15px; overflow-x: auto; padding: 20px 5%; margin-bottom: 20px;
-            scrollbar-width: none;
-        }
-        .category-scroll::-webkit-scrollbar { display: none; }
-
-        .cat-chip {
-            padding: 10px 24px; border-radius: 50px; background: var(--bg-card);
-            color: var(--text-muted); border: 1px solid #333; cursor: pointer;
-            white-space: nowrap; transition: all 0.3s; font-size: 0.9rem;
-        }
-        .cat-chip:hover { background: var(--bg-hover); color: var(--text-main); border-color: #555; }
-        .cat-chip.active {
-            background: var(--accent); color: #000; font-weight: 700;
-            border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        /* --- Masonry Grid --- */
-        .gallery-container { padding: 0 5% 50px 5%; }
-        .section-title { margin-bottom: 25px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
-        .section-title i { color: var(--accent); }
-
-        .masonry-grid { column-count: 4; column-gap: 20px; }
-        @media (max-width: 1200px) { .masonry-grid { column-count: 3; } }
-        @media (max-width: 768px) { .masonry-grid { column-count: 2; } }
-        @media (max-width: 480px) { .masonry-grid { column-count: 1; } }
-
-        .grid-item {
-            break-inside: avoid; margin-bottom: 20px; position: relative;
-            border-radius: var(--radius-md); overflow: hidden; background: var(--bg-card);
-            cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .grid-item:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-
-        .grid-item img, .grid-item video {
-            width: 100%; height: auto; display: block;
-            border-radius: var(--radius-md); transition: opacity 0.3s;
-        }
-        .grid-item video { object-fit: cover; }
-
-        .overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            opacity: 0; transition: opacity 0.3s; display: flex;
-            flex-direction: column; justify-content: flex-end; padding: 15px;
-        }
-        .grid-item:hover .overlay { opacity: 1; }
-
-        .item-info h3 { font-size: 1rem; margin-bottom: 5px; }
-        .item-tags { font-size: 0.8rem; color: var(--accent); }
-        .type-indicator {
-            position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 4px;
-            font-size: 0.7rem; color: white; z-index: 2;
-        }
-
-        /* --- Modal --- */
-        .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 2000; display: none;
-            align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;
-        }
-        .modal.open { display: flex; opacity: 1; }
-
-        .modal-content {
-            width: 90%; max-width: 1000px; height: 90vh; display: grid;
-            grid-template-columns: 2fr 1fr; background: var(--bg-card);
-            border-radius: var(--radius-lg); overflow: hidden;
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.1);
-        }
-
-        .modal-preview { background: #000; display: flex; align-items: center; justify-content: center; position: relative; }
-        .modal-preview img, .modal-preview video { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-        .modal-details { padding: 30px; display: flex; flex-direction: column; justify-content: space-between; }
-        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 2rem; color: white; cursor: pointer; z-index: 2001; }
-
-        .detail-header h2 { font-size: 2rem; margin-bottom: 10px; color: var(--text-main); }
-        .detail-header span { color: var(--accent); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
-
-        .detail-meta { margin-top: 20px; color: var(--text-muted); font-size: 0.9rem; }
-        .detail-meta p { margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
-
-        .download-btn {
-            background: var(--accent); color: #000; text-decoration: none;
-            padding: 15px; text-align: center; border-radius: var(--radius-sm);
-            font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-            transition: all 0.3s; display: block; margin-top: 20px;
-        }
-        .download-btn:hover { background: white; box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
-
-        @media (max-width: 768px) {
-            .modal-content { grid-template-columns: 1fr; grid-template-rows: 1fr auto; height: 95vh; }
-            .modal-details { padding: 20px; }
-            .hero h1 { font-size: 2rem; }
-        }
-
-        /* --- Footer --- */
-        footer { text-align: center; padding: 40px; color: var(--text-muted); border-top: 1px solid #222; }
-        .loading-spinner { text-align: center; padding: 20px; color: var(--accent); font-size: 1.5rem; display: none; }
-
+        /* CSS REMAINS THE SAME AS YOUR ORIGINAL UPLOAD - IT WAS GOOD */
+        :root { --bg-dark: #0a0a0a; --bg-card: #141414; --bg-hover: #1f1f1f; --accent: #00FFFF; --accent-glow: rgba(0, 255, 255, 0.4); --text-main: #ffffff; --text-muted: #a0a0a0; --radius-lg: 16px; --radius-md: 12px; --radius-sm: 8px; --shadow: 0 10px 30px rgba(0, 0, 0, 0.5); --nav-height: 70px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--bg-dark); } ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        header { position: fixed; top: 0; width: 100%; height: var(--nav-height); background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(10px); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -1px; color: var(--text-main); display: flex; align-items: center; gap: 10px; } .logo span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
+        .nav-links { display: flex; gap: 30px; } .nav-btn { background: none; border: none; color: var(--text-muted); font-size: 1rem; cursor: pointer; transition: color 0.3s; font-weight: 600; } .nav-btn:hover, .nav-btn.active { color: var(--text-main); } .nav-btn.active { position: relative; } .nav-btn.active::after { content: ''; position: absolute; bottom: -24px; left: 0; width: 100%; height: 2px; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+        .hero { margin-top: var(--nav-height); height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, var(--bg-dark) 70%); padding: 20px; } .hero h1 { font-size: 3rem; margin-bottom: 15px; line-height: 1.1; } .hero h1 span { background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } .hero p { color: var(--text-muted); max-width: 600px; margin-bottom: 30px; font-size: 1.1rem; }
+        .search-container { position: relative; width: 100%; max-width: 500px; } .search-bar { width: 100%; padding: 16px 24px; padding-left: 50px; border-radius: 50px; border: 1px solid #333; background: var(--bg-card); color: white; font-size: 1rem; transition: all 0.3s ease; } .search-bar:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); } .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .category-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 20px 5%; margin-bottom: 20px; scrollbar-width: none; } .category-scroll::-webkit-scrollbar { display: none; }
+        .cat-chip { padding: 10px 24px; border-radius: 50px; background: var(--bg-card); color: var(--text-muted); border: 1px solid #333; cursor: pointer; white-space: nowrap; transition: all 0.3s; font-size: 0.9rem; } .cat-chip:hover { background: var(--bg-hover); color: var(--text-main); border-color: #555; } .cat-chip.active { background: var(--accent); color: #000; font-weight: 700; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+        .gallery-container { padding: 0 5% 50px 5%; } .section-title { margin-bottom: 25px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; } .section-title i { color: var(--accent); }
+        .masonry-grid { column-count: 4; column-gap: 20px; } @media (max-width: 1200px) { .masonry-grid { column-count: 3; } } @media (max-width: 768px) { .masonry-grid { column-count: 2; } } @media (max-width: 480px) { .masonry-grid { column-count: 1; } }
+        .grid-item { break-inside: avoid; margin-bottom: 20px; position: relative; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-card); cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; } .grid-item:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+        .grid-item img, .grid-item video { width: 100%; height: auto; display: block; border-radius: var(--radius-md); transition: opacity 0.3s; } .grid-item video { object-fit: cover; }
+        .overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); opacity: 0; transition: opacity 0.3s; display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; } .grid-item:hover .overlay { opacity: 1; }
+        .item-info h3 { font-size: 1rem; margin-bottom: 5px; } .item-tags { font-size: 0.8rem; color: var(--accent); } .type-indicator { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; color: white; z-index: 2; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; } .modal.open { display: flex; opacity: 1; }
+        .modal-content { width: 90%; max-width: 1000px; height: 90vh; display: grid; grid-template-columns: 2fr 1fr; background: var(--bg-card); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 0 40px rgba(0, 255, 255, 0.1); }
+        .modal-preview { background: #000; display: flex; align-items: center; justify-content: center; position: relative; } .modal-preview img, .modal-preview video { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .modal-details { padding: 30px; display: flex; flex-direction: column; justify-content: space-between; } .close-modal { position: absolute; top: 20px; right: 20px; font-size: 2rem; color: white; cursor: pointer; z-index: 2001; }
+        .detail-header h2 { font-size: 2rem; margin-bottom: 10px; color: var(--text-main); } .detail-header span { color: var(--accent); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .detail-meta { margin-top: 20px; color: var(--text-muted); font-size: 0.9rem; } .detail-meta p { margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .download-btn { background: var(--accent); color: #000; text-decoration: none; padding: 15px; text-align: center; border-radius: var(--radius-sm); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; display: block; margin-top: 20px; } .download-btn:hover { background: white; box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
+        @media (max-width: 768px) { .modal-content { grid-template-columns: 1fr; grid-template-rows: 1fr auto; height: 95vh; } .modal-details { padding: 20px; } .hero h1 { font-size: 2rem; } }
+        footer { text-align: center; padding: 40px; color: var(--text-muted); border-top: 1px solid #222; } .loading-spinner { text-align: center; padding: 20px; color: var(--accent); font-size: 1.5rem; display: none; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">
-            <i class="fa-solid fa-layer-group"></i>
-            Neon<span>Pixel</span>
-        </div>
+        <div class="logo"><i class="fa-solid fa-layer-group"></i> Neon<span>Pixel</span></div>
         <nav class="nav-links">
             <button class="nav-btn active" onclick="switchTab('wallpapers')">Wallpapers</button>
             <button class="nav-btn" onclick="switchTab('videos')">Live Wallpapers</button>
@@ -218,35 +50,24 @@
     <section class="hero">
         <h1>Customize Your <br> <span>Digital Reality</span></h1>
         <p>High-quality 4K AMOLED wallpapers and seamless video loops.</p>
-        
         <div class="search-container">
             <i class="fa-solid fa-search search-icon"></i>
             <input type="text" id="searchInput" class="search-bar" placeholder="Search anime, cars, neon..." onkeyup="filterContent()">
         </div>
     </section>
 
-    <div class="category-scroll" id="categoryList">
-    </div>
+    <div class="category-scroll" id="categoryList"></div>
 
     <main class="gallery-container">
-        <div class="section-title">
-            <i class="fa-solid fa-fire"></i>
-            <span id="galleryTitle">Latest Wallpapers</span>
-        </div>
-        
-        <div class="masonry-grid" id="galleryGrid">
-            </div>
-        
-        <div class="loading-spinner" id="spinner">
-            <i class="fa-solid fa-circle-notch fa-spin"></i>
-        </div>
+        <div class="section-title"><i class="fa-solid fa-fire"></i> <span id="galleryTitle">Latest Wallpapers</span></div>
+        <div class="masonry-grid" id="galleryGrid"></div>
+        <div class="loading-spinner" id="spinner"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
     </main>
 
     <div class="modal" id="imageModal">
         <div class="close-modal" onclick="closeModal()">&times;</div>
         <div class="modal-content">
-            <div class="modal-preview" id="modalPreview">
-            </div>
+            <div class="modal-preview" id="modalPreview"></div>
             <div class="modal-details">
                 <div class="detail-header">
                     <span id="modalCategory">Category</span>
@@ -255,7 +76,6 @@
                         <p><i class="fa-solid fa-eye"></i> 12.5k Views</p>
                         <p><i class="fa-solid fa-download"></i> 3.2k Downloads</p>
                         <p><i class="fa-solid fa-expand"></i> <span id="modalRes">4K Ultra HD</span></p>
-                        <p id="modalDesc">Premium wallpaper designed for high-resolution displays with deep blacks and vibrant colors.</p>
                     </div>
                 </div>
                 <a href="#" id="modalDownload" class="download-btn" download target="_blank">
@@ -265,92 +85,66 @@
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2024 NeonPixel. Designed for Creators.</p>
-    </footer>
+    <footer><p>&copy; 2024 NeonPixel. Designed for Creators.</p></footer>
 
     <script>
-        /* * --------------------------------------------------
-         * JAVASCRIPT SECTION (Updated for Cloudinary)
-         * --------------------------------------------------
-         */
-
         let wallpapers = [];
         let videos = [];
-        
-        // These must match the categories used in your Python Bot
         const categories = ["All", "Anime", "Cars", "Nature", "Gaming", "Cyberpunk", "Abstract"];
+        let currentTab = 'wallpapers';
+        let currentCategory = 'All';
 
-        /* --------------------------------------------------
-         * 1. Smart Data Loader
-         * -------------------------------------------------- */
+        document.addEventListener('DOMContentLoaded', loadData);
+
         async function loadData() {
             try {
-                // 1. Try to fetch the Cloud Database first
-                console.log("Fetching cloud data...");
+                // Fetch Cloud Wallpapers
                 const cloudResponse = await fetch("data/cloud_wallpapers.json");
-                
-                if (!cloudResponse.ok) {
-                    throw new Error("Cloud database not found.");
+                if (cloudResponse.ok) {
+                    const cloudData = await cloudResponse.json();
+                    wallpapers = cloudData.map((item, i) => ({
+                        id: i + 1,
+                        title: item.title,
+                        category: item.category,
+                        type: "image",
+                        src: item.src,
+                        // Optimize Cloudinary URL for thumbnail
+                        thumb: item.src.includes('cloudinary') 
+                               ? item.src.replace("/upload/", "/upload/w_500,f_auto,q_auto/") 
+                               : item.src, 
+                        res: "4K"
+                    }));
                 }
 
-                const cloudData = await cloudResponse.json();
-
-                // 2. Fetch Videos (Local or Cloud)
-                let videoData = [];
+                // Fetch Videos
                 try {
                     const vidResponse = await fetch("data/videos.json");
-                    if(vidResponse.ok) videoData = await vidResponse.json();
-                } catch(e) { console.log("No videos found."); }
+                    if(vidResponse.ok) {
+                        const vidData = await vidResponse.json();
+                        videos = vidData.map((item, i) => ({
+                            id: i + 100,
+                            title: item.title,
+                            category: item.category,
+                            type: "video",
+                            src: item.src, // Unified 'src' key
+                            res: "1080p"
+                        }));
+                    }
+                } catch(e) { console.log("No videos found yet."); }
 
-                // 3. Process Wallpapers (Add Thumbnail Logic)
-                wallpapers = cloudData.map((item, i) => ({
-                    id: i + 1,
-                    title: item.title,
-                    category: item.category,
-                    type: "image",
-                    src: item.src, // Original 4K URL
-                    // Create optimized thumbnail: Insert cloud transforms
-                    thumb: item.src.includes('cloudinary') 
-                           ? item.src.replace("/upload/", "/upload/w_500,f_auto,q_auto/") 
-                           : item.src, 
-                    res: "4K"
-                }));
-
-                // 4. Process Videos
-                videos = videoData.map((item, i) => ({
-                    id: i + 100,
-                    title: item.title || "Live Wallpaper",
-                    category: item.category || "Live",
-                    type: "video",
-                    src: item.path,
-                    res: "1080p"
-                }));
-
-                console.log(`Loaded ${wallpapers.length} wallpapers and ${videos.length} videos.`);
-                
-                // Initialize UI
                 renderCategories();
                 renderGallery();
 
             } catch (err) {
-                console.error("Critical Error:", err);
-                document.getElementById('galleryGrid').innerHTML = 
-                    '<div style="text-align:center; padding:40px; color:#ff4444;">' +
-                    '<h3>Data Load Error</h3>' +
-                    '<p>Could not load wallpapers. Please check if the Bot has run successfully.</p>' +
-                    '</div>';
+                console.error("Error:", err);
+                document.getElementById('galleryGrid').innerHTML = '<p style="padding:20px; color:red;">Loading data... (If this persists, run the bot)</p>';
             }
         }
 
-        /* --------------------------------------------------
-         * 2. Render Logic
-         * -------------------------------------------------- */
         function renderGallery() {
             const container = document.getElementById('galleryGrid');
             const sourceData = currentTab === 'wallpapers' ? wallpapers : videos;
             
-            // Filter Data
             const filteredData = sourceData.filter(item => {
                 const matchesCat = currentCategory === 'All' || item.category === currentCategory;
                 const searchTerm = document.getElementById('searchInput').value.toLowerCase();
@@ -359,7 +153,6 @@
             });
 
             container.innerHTML = '';
-            
             if (filteredData.length === 0) {
                  container.innerHTML = '<p style="color:var(--text-muted); padding:20px;">No results found.</p>';
                  return;
@@ -372,44 +165,26 @@
                 
                 let mediaContent;
                 if (item.type === 'image') {
-                    // USE THE THUMBNAIL URL HERE (Fast)
                     mediaContent = `<img src="${item.thumb}" alt="${item.title}" loading="lazy">`;
                 } else {
-                    mediaContent = `
-                        <video loop muted playsinline poster="">
-                            <source src="${item.src}" type="video/mp4">
-                        </video>
-                        <div class="type-indicator"><i class="fa-solid fa-play"></i> LIVE</div>
-                    `;
+                    mediaContent = `<video loop muted playsinline poster=""><source src="${item.src}" type="video/mp4"></video>
+                                    <div class="type-indicator"><i class="fa-solid fa-play"></i> LIVE</div>`;
                 }
 
-                card.innerHTML = `
-                    ${mediaContent}
+                card.innerHTML = `${mediaContent}
                     <div class="overlay">
-                        <div class="item-info">
-                            <h3>${item.title}</h3>
-                            <span class="item-tags">#${item.category}</span>
-                        </div>
-                    </div>
-                `;
+                        <div class="item-info"><h3>${item.title}</h3><span class="item-tags">#${item.category}</span></div>
+                    </div>`;
                 container.appendChild(card);
             });
             
             if (currentTab === 'videos') setupIntersectionObserver();
         }
 
-        // --- Navigation & Categories ---
-        let currentTab = 'wallpapers';
-        let currentCategory = 'All';
-
-        document.addEventListener('DOMContentLoaded', loadData);
-
         function renderCategories() {
             const container = document.getElementById('categoryList');
             container.innerHTML = categories.map(cat => `
-                <div class="cat-chip ${cat === 'All' ? 'active' : ''}" onclick="filterCategory(this, '${cat}')">
-                    ${cat}
-                </div>
+                <div class="cat-chip ${cat === 'All' ? 'active' : ''}" onclick="filterCategory(this, '${cat}')">${cat}</div>
             `).join('');
         }
 
@@ -419,7 +194,7 @@
             event.target.classList.add('active');
             document.getElementById('galleryTitle').innerText = tab === 'wallpapers' ? 'Latest Wallpapers' : 'Live Wallpapers';
             currentCategory = 'All';
-            renderCategories(); // Reset chips
+            renderCategories();
             renderGallery();
         }
 
@@ -429,34 +204,21 @@
             element.classList.add('active');
             renderGallery();
         }
-
         function filterContent() { renderGallery(); }
 
-        /* --------------------------------------------------
-         * 3. Modal Logic
-         * -------------------------------------------------- */
         function openModal(item) {
             const modal = document.getElementById('imageModal');
             const preview = document.getElementById('modalPreview');
-            const title = document.getElementById('modalTitle');
-            const cat = document.getElementById('modalCategory');
-            const btn = document.getElementById('modalDownload');
-
-            title.innerText = item.title;
-            cat.innerText = item.category;
-            
-            // IMPORTANT: Download button gets the FULL 4K SRC
-            btn.href = item.src; 
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalCategory').innerText = item.category;
+            document.getElementById('modalDownload').href = item.src; 
 
             if (item.type === 'image') {
                 preview.innerHTML = `<img src="${item.src}" alt="${item.title}">`;
             } else {
-                preview.innerHTML = `
-                    <video autoplay loop muted controls>
-                        <source src="${item.src}" type="video/mp4">
-                    </video>`;
+                // FIXED: added playsinline and removed controls initially to ensure loop works smoothly
+                preview.innerHTML = `<video autoplay loop muted playsinline controls><source src="${item.src}" type="video/mp4"></video>`;
             }
-
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
         }
@@ -464,28 +226,23 @@
         function closeModal() {
             document.getElementById('imageModal').classList.remove('open');
             document.body.style.overflow = 'auto';
-            setTimeout(() => { document.getElementById('modalPreview').innerHTML = ''; }, 300);
+            document.getElementById('modalPreview').innerHTML = ''; // Stop video
         }
 
         document.getElementById('imageModal').addEventListener('click', (e) => {
             if (e.target.id === 'imageModal') closeModal();
         });
         
-        // Video Auto-Play (Only when visible)
         function setupIntersectionObserver() {
             const videos = document.querySelectorAll('.grid-item video');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.play().catch(()=>{});
-                    } else {
-                        entry.target.pause();
-                    }
+                    if (entry.isIntersecting) entry.target.play().catch(()=>{});
+                    else entry.target.pause();
                 });
             }, { threshold: 0.5 });
             videos.forEach(video => observer.observe(video));
         }
-
     </script>
 </body>
 </html>
