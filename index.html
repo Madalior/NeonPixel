@@ -23,7 +23,7 @@
         .dev-btn { padding: 10px 20px; background: transparent; border: none; color: var(--text-dim); cursor: pointer; border-radius: 8px; display: flex; gap: 8px; align-items: center; transition: 0.3s; }
         .dev-btn.active { background: var(--accent); color: #000; font-weight: 700; }
 
-        /* CATEGORIES & SUBCATEGORIES */
+        /* CATEGORIES */
         .cat-row { display: flex; gap: 10px; overflow-x: auto; padding: 10px 5%; scrollbar-width: none; justify-content: center; }
         .cat-chip { white-space: nowrap; padding: 8px 20px; border-radius: 30px; background: var(--card); border: 1px solid #333; color: var(--text-dim); cursor: pointer; transition: 0.3s; }
         .cat-chip.active { border-color: var(--accent); color: var(--accent); }
@@ -69,9 +69,7 @@
     </div>
 
     <div class="cat-row" id="mainCats"></div>
-    
     <div class="sub-cat-row" id="subCats"></div>
-
     <div class="grid" id="grid"></div>
 
     <div class="modal" id="modal">
@@ -86,14 +84,14 @@
         let data = { wallpapers: [], videos: [] };
         let state = { tab: 'wallpapers', device: 'mobile', cat: 'All', sub: 'All' };
         
-        // Define known subcategories for the UI
         const SUB_MAP = {
-            "Anime": ["All", "Naruto", "One Piece", "Dragon Ball", "Jujutsu Kaisen", "Demon Slayer", "Solo Leveling", "Ghibli"],
-            "Cars": ["All", "JDM", "BMW", "Porsche", "Ferrari", "GTR", "Toyota", "Audi", "Drift"],
-            "Gaming": ["All", "Valorant", "League of Legends", "Elden Ring", "Genshin Impact", "Minecraft", "Cyberpunk 2077", "GTA"],
-            "Nature": ["All", "Forest", "Ocean", "Mountain", "Space", "Sunset", "Winter", "Rain"],
+            "Anime": ["All", "Naruto", "One Piece", "Dragon Ball", "Jujutsu Kaisen", "Demon Slayer", "Attack on Titan", "Solo Leveling"],
+            "Cars": ["All", "JDM", "BMW", "Porsche", "Ferrari", "Lamborghini", "GTR", "Drift"],
+            "Gaming": ["All", "Valorant", "League of Legends", "Elden Ring", "Cyberpunk 2077", "GTA", "Minecraft"],
+            "Nature": ["All", "Forest", "Ocean", "Mountain", "Space", "Rain", "Sunset"],
             "Cyberpunk": ["All", "Neon", "City", "Robot", "Future", "Glitch"],
-            "Abstract": ["All", "Fluid", "Geometric", "Dark", "Light", "Minimal"]
+            "Abstract": ["All", "Fluid", "Geometric", "Dark", "Light", "Minimal"],
+            "Technology": ["All", "Code", "AI", "Hacker"]
         };
         const MAIN_CATS = ["All", ...Object.keys(SUB_MAP)];
 
@@ -104,18 +102,8 @@
                     fetch("data/cloud_wallpapers.json").then(r=>r.json()), 
                     fetch("data/videos.json").then(r=>r.json())
                 ]);
-                
-                // Map data and assign "General" if subcategory is missing
-                data.wallpapers = w.map(i => ({
-                    ...i, 
-                    subcategory: i.subcategory || "General", 
-                    device: i.device || "mobile"
-                }));
-                data.videos = v.map(i => ({
-                    ...i, 
-                    subcategory: i.subcategory || "General", 
-                    device: "mobile"
-                }));
+                data.wallpapers = w.map(i => ({...i, subcategory: i.subcategory || "General", device: i.device || "mobile"}));
+                data.videos = v.map(i => ({...i, subcategory: i.subcategory || "General", device: "mobile"}));
                 render();
             } catch(e) { console.log(e); }
         };
@@ -127,7 +115,6 @@
             const filtered = source.filter(item => {
                 const devMatch = (state.tab === 'videos') ? true : (item.device === state.device);
                 const catMatch = (state.cat === 'All') || (item.category === state.cat);
-                // Smart Filter: If sub is "All", show everything in main cat. Else match specific sub.
                 const subMatch = (state.sub === 'All') || (item.subcategory === state.sub);
                 return devMatch && catMatch && subMatch;
             });
@@ -140,17 +127,13 @@
                         ? `<img src="${item.src.replace('/upload/', '/upload/w_500,f_auto,q_auto/')}" loading="lazy">` 
                         : `<video src="${item.src}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`
                     }
-                    <div class="overlay">
-                        <span class="sub-tag">${item.subcategory}</span>
-                    </div>
+                    <div class="overlay"><span class="sub-tag">${item.subcategory}</span></div>
                 </div>
             `).join('');
         }
 
-        // --- UI LOGIC ---
         function renderCats() {
-            const c = document.getElementById('mainCats');
-            c.innerHTML = MAIN_CATS.map(cat => `
+            document.getElementById('mainCats').innerHTML = MAIN_CATS.map(cat => `
                 <div class="cat-chip ${cat === state.cat ? 'active' : ''}" onclick="setCat('${cat}')">${cat}</div>
             `).join('');
             renderSubCats();
@@ -158,30 +141,22 @@
 
         function renderSubCats() {
             const sc = document.getElementById('subCats');
-            if (state.cat === 'All' || !SUB_MAP[state.cat]) {
-                sc.className = "sub-cat-row"; // Hide if All or unknown
-                return;
-            }
-            sc.className = "sub-cat-row show"; // Show
+            if (state.cat === 'All' || !SUB_MAP[state.cat]) { sc.className = "sub-cat-row"; return; }
+            sc.className = "sub-cat-row show";
             sc.innerHTML = SUB_MAP[state.cat].map(sub => `
                 <div class="sub-chip ${sub === state.sub ? 'active' : ''}" onclick="setSub('${sub}')">${sub}</div>
             `).join('');
         }
 
-        function setTab(t) { 
-            state.tab = t; 
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            render(); 
-        }
-        function setDevice(d) {
-            state.device = d;
-            document.getElementById('d-mobile').className = `dev-btn ${d==='mobile'?'active':''}`;
-            document.getElementById('d-desktop').className = `dev-btn ${d==='desktop'?'active':''}`;
-            render();
-        }
+        function setTab(t) { state.tab = t; updateActive('.tab-btn'); render(); }
+        function setDevice(d) { state.device = d; updateActive('.dev-btn'); render(); }
         function setCat(c) { state.cat = c; state.sub = 'All'; renderCats(); render(); }
         function setSub(s) { state.sub = s; renderSubCats(); render(); }
+        
+        function updateActive(sel) {
+            document.querySelectorAll(sel).forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
 
         function openModal(item) {
             const m = document.getElementById('modal');
@@ -191,12 +166,8 @@
             d.href = item.src;
             m.classList.add('active');
         }
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-            document.getElementById('m-preview').innerHTML = '';
-        }
+        function closeModal() { document.getElementById('modal').classList.remove('active'); document.getElementById('m-preview').innerHTML = ''; }
         document.getElementById('modal').addEventListener('click', (e) => { if(e.target.id === 'modal') closeModal(); });
-
     </script>
 </body>
 </html>
