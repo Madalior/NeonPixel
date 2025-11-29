@@ -101,7 +101,32 @@ def get_pixabay_videos():
 if __name__ == "__main__":
     images = get_unsplash_images()
     videos = get_pixabay_videos()
-    
-    # Always try to save/create the file
-    save_json("data/cloud_wallpapers.json", images, 200)
-    save_json("data/videos.json", videos, 50)
+
+    # 2. Update Wallpapers JSON
+    if images:
+        f_path = "data/cloud_wallpapers.json"
+        existing = []
+        if os.path.exists(f_path):
+            try: existing = json.load(open(f_path))
+            except: pass
+        
+        final_img = images + existing
+        os.makedirs("data", exist_ok=True)
+        json.dump(final_img[:100], open(f_path, "w"), indent=4)
+        print(f"✅ Saved {len(images)} new images.")
+
+    # 3. Update Videos JSON
+    if videos:
+        f_path = "data/videos.json"
+        existing = []
+        if os.path.exists(f_path):
+            try: existing = json.load(open(f_path))
+            except: pass
+            
+        final_vid = videos + existing
+        os.makedirs("data", exist_ok=True)
+        json.dump(final_vid[:50], open(f_path, "w"), indent=4)
+        print(f"✅ Saved {len(videos)} new videos.")
+
+if __name__ == "__main__":
+    run_bot()
