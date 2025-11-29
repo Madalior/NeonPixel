@@ -41,7 +41,7 @@ jobs:
           git config --global user.name "NeonPixel AI"
           git config --global user.email "bot@neonpixel.com"
           
-          # Safety Net: Create files if missing
+          # Safety Net: Create files if missing (Prevents Git errors on first run)
           if [ ! -f data/cloud_wallpapers.json ]; then
             mkdir -p data
             echo "[]" > data/cloud_wallpapers.json
@@ -53,7 +53,11 @@ jobs:
           
           git add data/cloud_wallpapers.json data/videos.json
           
-          # Smart Push: Pull latest changes first to avoid conflicts
-          git pull --rebase
+          # 1. COMMIT: Save the bot's new work first
           git commit -m "🤖 AI Auto-Update: New Assets" || echo "No changes to commit"
+          
+          # 2. PULL: Sync with GitHub, putting our new commit on top
+          git pull --rebase
+          
+          # 3. PUSH: Send the final result to the main branch
           git push
