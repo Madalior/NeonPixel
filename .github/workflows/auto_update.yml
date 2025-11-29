@@ -26,7 +26,7 @@ jobs:
       - name: Install FFmpeg
         run: sudo apt-get install -y ffmpeg
 
-      # --- FIX IS HERE: Pull latest changes BEFORE running the bot ---
+      # 1. Sync with GitHub BEFORE starting (Reduces conflicts)
       - name: Sync with GitHub
         run: git pull origin main || echo "Nothing to pull"
 
@@ -43,7 +43,7 @@ jobs:
           git config --global user.name "NeonPixel AI"
           git config --global user.email "bot@neonpixel.com"
           
-          # Safety Net: Create files if they are missing
+          # Safety Net: Create files if they are missing to prevent errors
           if [ ! -f data/cloud_wallpapers.json ]; then
             mkdir -p data
             echo "[]" > data/cloud_wallpapers.json
@@ -58,5 +58,7 @@ jobs:
           # Only commit if there are actual changes
           git diff-index --quiet HEAD || git commit -m "🤖 AI Auto-Update: New Assets"
           
-          # Force push to resolve any remaining conflicts
-          git push origin main
+          # --- THE MAGIC FIX ---
+          # -Xtheirs means: "If there is a conflict, keep the Bot's changes (Theirs)"
+          git pull --rebase -Xtheirs origin main
+          git push
