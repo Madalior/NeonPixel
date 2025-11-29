@@ -26,13 +26,20 @@
             --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
+        /* DEFAULT (Desktop): Hide Cursor */
+        @media (min-width: 992px) {
+            * { cursor: none; }
+        }
+
         body {
             background-color: var(--bg-deep);
             color: var(--text-main);
             font-family: var(--font-modern);
             overflow-x: hidden;
+            /* Added padding at bottom so mobile scrolling doesn't feel cramped */
+            padding-bottom: 60px; 
         }
 
         /* --- CUSTOM SCROLLBAR --- */
@@ -44,10 +51,11 @@
         }
         ::-webkit-scrollbar-thumb:hover { background: var(--gold-neon); }
 
-        /* --- 2. ADVANCED CURSOR --- */
+        /* --- 2. ADVANCED CURSOR (Desktop Only) --- */
         .cursor-dot, .cursor-circle {
             position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
             pointer-events: none; z-index: 99999; border-radius: 50%;
+            display: none; /* Hidden by default, shown via JS on desktop */
         }
         .cursor-dot { width: 6px; height: 6px; background: var(--gold-neon); box-shadow: 0 0 10px var(--gold-neon); }
         .cursor-circle {
@@ -72,10 +80,11 @@
 
         /* --- 4. HERO SECTION --- */
         .hero {
-            position: relative; height: 50vh; width: 100%;
+            position: relative; min-height: 50vh; width: 100%;
             display: flex; flex-direction: column; 
             align-items: center; justify-content: center;
             overflow: hidden; z-index: 1;
+            padding: 100px 20px 40px;
         }
         
         .hero-video {
@@ -87,20 +96,21 @@
             background: radial-gradient(circle at center, transparent, var(--bg-deep));
         }
 
-        .hero-content { z-index: 2; text-align: center; }
+        .hero-content { z-index: 2; text-align: center; width: 100%; }
         
         h1 {
             font-family: var(--font-royal); font-size: 4rem; color: #fff;
             text-transform: uppercase; letter-spacing: 8px;
             text-shadow: 0 0 30px var(--gold-glow);
             animation: textGlow 3s infinite alternate;
+            margin-bottom: 10px;
         }
         @keyframes textGlow { from{text-shadow: 0 0 20px var(--gold-glow);} to{text-shadow: 0 0 50px var(--gold-glow-strong);} }
 
         /* --- 5. SEARCH --- */
         .search-container {
-            z-index: 10; width: 100%; max-width: 650px; padding: 0 20px;
-            margin-top: 30px; position: relative;
+            z-index: 10; width: 100%; max-width: 650px; 
+            margin-top: 20px; position: relative;
         }
         .search-wrapper {
             position: relative; width: 100%;
@@ -113,9 +123,10 @@
         }
         .search-input {
             width: 100%; background: transparent; border: none; color: #fff;
-            padding: 18px 30px; font-family: var(--font-modern); font-size: 1.1rem;
+            padding: 15px 25px; font-family: var(--font-modern); font-size: 1rem;
+            outline: none;
         }
-        .search-icon { padding-right: 30px; color: var(--gold-primary); font-size: 1.2rem; }
+        .search-icon { padding-right: 25px; color: var(--gold-primary); font-size: 1.2rem; }
 
         /* --- 6. FEATURED VIDEO DISPLAY BAR --- */
         .showcase-bar {
@@ -148,35 +159,96 @@
             box-shadow: 0 0 20px var(--gold-glow);
         }
 
-        /* --- 7. CATEGORIES --- */
-        .filter-section { padding: 10px 5%; display: flex; flex-direction: column; gap: 15px; align-items: center; z-index: 5; position: relative;}
-        .scroll-row { display: flex; gap: 12px; overflow-x: auto; padding: 10px; width: 100%; justify-content: center; scrollbar-width: none; }
+        /* --- 7. CATEGORIES (FIXED SECTION) --- */
+        .filter-section { 
+            padding: 10px 0; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            align-items: center; 
+            z-index: 5; 
+            position: relative;
+        }
+        
+        /* FIXED: Increased padding so shadows/glows aren't cut off */
+        .scroll-row { 
+            display: flex; 
+            gap: 15px; 
+            overflow-x: auto; 
+            padding: 15px 20px; /* Increased top/bottom padding */
+            width: 100%; 
+            justify-content: flex-start; /* Aligns left so scrolling works naturally */
+            scrollbar-width: none; 
+            -webkit-overflow-scrolling: touch; 
+        }
+        .scroll-row::-webkit-scrollbar { display: none; }
         
         .oval-btn {
-            background: var(--glass); border: 1px solid var(--glass-border);
-            color: #aaa; padding: 12px 30px; border-radius: 50px;
-            font-family: var(--font-modern); font-weight: 600; font-size: 0.85rem;
-            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
-            position: relative; overflow: hidden;
+            background: var(--glass); 
+            border: 1px solid var(--glass-border);
+            color: #aaa; 
+            /* FIXED: Balanced padding and alignment */
+            padding: 0 25px; 
+            height: 42px; /* Fixed height to prevent squishing */
+            min-height: 42px;
+            border-radius: 50px;
+            font-family: var(--font-modern); 
+            font-weight: 600; 
+            font-size: 0.85rem;
+            transition: 0.3s; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            position: relative; 
+            overflow: visible; /* Changed from hidden to visible to show glows */
+            white-space: nowrap; 
+            flex-shrink: 0;
+            
+            /* FIXED: Flex centering ensures text is perfectly in the middle */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+        
         .oval-btn:hover, .oval-btn.active {
-            border-color: var(--gold-neon); color: var(--gold-neon);
-            box-shadow: 0 0 25px var(--gold-glow); background: rgba(212, 175, 55, 0.05);
+            border-color: var(--gold-neon); 
+            color: var(--gold-neon);
+            box-shadow: 0 0 25px var(--gold-glow); 
+            background: rgba(212, 175, 55, 0.05);
+            transform: scale(1.05); /* Slight pop effect */
         }
-        .oval-btn.sub { padding: 8px 22px; font-size: 0.75rem; border-color: #333; }
-        .sub-scroll { height: 0; opacity: 0; transition: 0.4s; overflow: hidden;}
-        .sub-scroll.show { height: auto; opacity: 1; padding-bottom: 20px; }
+        
+        .oval-btn.sub { 
+            height: 36px; 
+            min-height: 36px;
+            font-size: 0.75rem; 
+            border-color: #333; 
+        }
+        
+        .sub-scroll { 
+            height: 0; 
+            opacity: 0; 
+            transition: 0.4s; 
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .sub-scroll.show { 
+            height: auto; 
+            opacity: 1; 
+            /* FIXED: Space at bottom for sub-category shadows */
+            padding-bottom: 25px; 
+            padding-top: 5px;
+        }
 
         /* --- 8. GALLERY GRID --- */
         .gallery { column-count: 4; column-gap: 25px; padding: 20px 5%; perspective: 1000px; z-index: 5; position: relative; }
-        @media(max-width: 1000px){ .gallery { column-count: 2; } }
-        @media(max-width: 600px){ .gallery { column-count: 1; } }
-
+        
         .card {
             break-inside: avoid; margin-bottom: 25px; border-radius: 16px;
             position: relative; border: 1px solid rgba(255,255,255,0.05);
             background: #111; transform-style: preserve-3d;
             transition: transform 0.1s ease-out;
+            width: 100%;
         }
         .card-inner { overflow: hidden; border-radius: 16px; position: relative; }
         .card img, .card video { width: 100%; display: block; opacity: 0.9; transition: 0.5s; }
@@ -186,7 +258,7 @@
             border-color: var(--gold-primary); z-index: 10;
         }
 
-        /* --- 9. NEW DETAILED MODAL --- */
+        /* --- 9. MODAL --- */
         .modal { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.96); z-index: 99999; 
@@ -199,10 +271,9 @@
             background: #080808; border: 1px solid var(--gold-primary);
             border-radius: 20px; overflow: hidden;
             box-shadow: 0 0 80px rgba(212, 175, 55, 0.2);
+            position: relative;
         }
         
-        @media(max-width: 800px) { .modal-layout { flex-direction: column; height: 90vh; } }
-
         /* Left Side: Media */
         .modal-media-container {
             flex: 2; background: #000; display: flex; align-items: center; justify-content: center;
@@ -216,7 +287,7 @@
         .modal-details {
             flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center;
             background: linear-gradient(135deg, #0a0a0a, #0f0f0f);
-            position: relative;
+            position: relative; overflow-y: auto; /* Scroll if content is tall */
         }
         
         .detail-title {
@@ -232,14 +303,12 @@
             border: 1px solid #333; font-size: 0.75rem; text-transform: uppercase;
         }
 
-        /* Stat Grid */
         .stat-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;
         }
         .stat-item h4 { color: #555; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 5px; }
         .stat-item p { color: #fff; font-size: 1.1rem; font-family: var(--font-royal); }
 
-        /* Buttons */
         .action-btn {
             width: 100%; padding: 15px; border: none; border-radius: 8px;
             font-family: var(--font-modern); font-weight: bold; text-transform: uppercase;
@@ -250,7 +319,6 @@
             box-shadow: 0 0 20px var(--gold-glow);
         }
         .btn-download:hover { background: #fff; box-shadow: 0 0 30px #fff; }
-        
         .btn-close {
             background: transparent; border: 1px solid #333; color: #fff;
         }
@@ -266,12 +334,76 @@
         }
         .nav-link.active, .nav-link:hover { opacity: 1; color: var(--gold-neon); text-shadow: 0 0 10px var(--gold-glow); }
 
+        /* ========================================= */
+        /* === MOBILE & RESPONSIVE OPTIMIZATIONS === */
+        /* ========================================= */
+
+        @media (max-width: 1024px) {
+            .gallery { column-count: 3; }
+        }
+
+        @media (max-width: 768px) {
+            /* 1. Reset Cursor for Touch */
+            * { cursor: auto !important; }
+            .cursor-dot, .cursor-circle { display: none !important; }
+            
+            /* 2. Typography Scaling */
+            h1 { font-size: 2.2rem; letter-spacing: 4px; }
+            .subtitle { font-size: 0.7rem !important; letter-spacing: 3px !important; }
+            
+            /* 3. Layout Adjustments */
+            .hero { height: auto; padding-top: 100px; padding-bottom: 40px; }
+            .top-nav { 
+                top: 20px; right: 50%; transform: translateX(50%); 
+                width: 100%; justify-content: center; 
+            }
+            .search-container { padding: 0 10px; margin-top: 15px; }
+            .search-input { padding: 12px 20px; font-size: 0.95rem; }
+            
+            .showcase-bar { height: 200px; width: 95%; margin-bottom: 30px; }
+            
+            .scroll-row { justify-content: flex-start; padding-left: 20px; } /* Allow side scrolling start */
+            
+            .gallery { column-count: 2; gap: 15px; padding: 10px; }
+            
+            /* 4. Mobile Modal (Stack Vertically) */
+            .modal-layout { 
+                flex-direction: column; 
+                width: 100%; height: 100%; 
+                border-radius: 0; border: none;
+            }
+            .modal-media-container { flex: 1; max-height: 50vh; border-right: none; border-bottom: 1px solid #222; }
+            .modal-details { 
+                flex: 1; padding: 25px; 
+                justify-content: flex-start; 
+                padding-bottom: 80px; /* Extra padding for mobile scrolling in modal */
+            }
+            .detail-title { font-size: 1.5rem; }
+            .stat-grid { margin-bottom: 20px; gap: 10px; }
+            .stat-item p { font-size: 0.9rem; }
+            
+            /* 5. Mobile Button Adjustment */
+            .oval-btn { 
+                font-size: 0.8rem; 
+                padding: 0 20px;
+                /* Ensure enough touch area */
+                min-height: 40px; 
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery { column-count: 1; }
+            .search-wrapper { border-radius: 15px; }
+        }
+
     </style>
 </head>
 <body>
 
     <div class="cursor-dot"></div>
     <div class="cursor-circle"></div>
+    
     <div class="particles"></div>
 
     <div class="top-nav">
@@ -291,7 +423,7 @@
         
         <div class="search-container">
             <div class="search-wrapper hover-target">
-                <input type="text" class="search-input" id="search" placeholder="Search the Royal Archives..." onkeyup="render()">
+                <input type="text" class="search-input" id="search" placeholder="Search Archives..." onkeyup="render()">
                 <i class="fa-solid fa-search search-icon"></i>
             </div>
         </div>
@@ -362,14 +494,22 @@
 
         let state = { tab: 'wallpapers', cat: 'All', sub: 'All', data: { wallpapers: [], videos: [] } };
 
+        // Check if device uses touch (to disable custom cursor logic)
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
         window.onload = () => {
-            initCursor();
+            if(!isTouchDevice) {
+                // Only init custom cursor on non-touch desktop
+                initCursor();
+                document.querySelector('.cursor-dot').style.display = 'block';
+                document.querySelector('.cursor-circle').style.display = 'block';
+            }
             renderCats();
             generateMockData();
             render();
         };
 
-        // --- 1. MAGNETIC CURSOR & TILT ---
+        // --- 1. MAGNETIC CURSOR & TILT (Desktop Only) ---
         function initCursor() {
             const dot = document.querySelector('.cursor-dot');
             const circle = document.querySelector('.cursor-circle');
@@ -395,6 +535,7 @@
         }
 
         function attachMagnetic() {
+            if(isTouchDevice) return; // Skip on mobile
             const targets = document.querySelectorAll('button, a, input, .card, .hover-target, .oval-btn');
             targets.forEach(el => {
                 el.onmouseenter = () => document.body.classList.add('hovering');
@@ -406,6 +547,7 @@
         }
 
         function applyTilt(card, e) {
+            if(isTouchDevice) return;
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -450,12 +592,14 @@
                     <div class="card-inner">
                         ${item.type === 'image' 
                             ? `<img src="${item.src}" loading="lazy">` 
-                            : `<video src="${item.src}" muted loop onmouseenter="this.play()" onmouseleave="this.pause()"></video>`
+                            : `<video src="${item.src}" muted loop playsinline ${!isTouchDevice ? 'onmouseenter="this.play()" onmouseleave="this.pause()"' : 'autoplay'}></video>`
                         }
                     </div>
                 </div>
             `).join('');
-            attachMagnetic();
+            
+            // Re-attach magnetic events only for desktop
+            if(!isTouchDevice) attachMagnetic();
         }
 
         function renderCats() {
@@ -484,15 +628,16 @@
         function setCat(c) { state.cat = c; state.sub = 'All'; renderCats(); render(); }
         function setSub(s) { state.sub = s; renderSubs(); render(); }
         
-        // --- NEW MODAL LOGIC ---
+        // --- MODAL LOGIC ---
         function openModal(item) {
             const m = document.getElementById('modal');
             const preview = document.getElementById('m-preview');
             
             // Populate Image/Video
+            // Added playsinline for better mobile video handling
             preview.innerHTML = item.type === 'image' 
                 ? `<img src="${item.src}">` 
-                : `<video src="${item.src}" controls autoplay loop></video>`;
+                : `<video src="${item.src}" controls autoplay loop playsinline></video>`;
 
             // Populate Metadata
             document.getElementById('m-title').innerText = item.title;
@@ -508,10 +653,15 @@
             dlBtn.innerText = "Download " + (item.type === 'image' ? "Image" : "Video");
 
             m.classList.add('active');
+            
+            // Lock body scroll
+            document.body.style.overflow = 'hidden';
         }
         
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
+            // Release body scroll
+            document.body.style.overflow = 'auto';
             setTimeout(() => document.getElementById('m-preview').innerHTML = '', 300);
         }
     </script>
