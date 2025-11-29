@@ -2,6 +2,62 @@
     {
         "title": "Anime Live",
         "category": "Anime",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/video/upload/v1764398073/neonpixel/videos/Anime/khxlpljv8d8ozur6ndgp.mp4",
+        "type": "video",
+        "res": "1080p"
+    },
+    {
+        "title": "Cars Live",
+        "category": "Cars",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/video/upload/v1764398075/neonpixel/videos/Cars/olkjioqrs1c4mk0vl2gy.mp4",
+        "type": "video",
+        "res": "1080p"
+    },
+    {
+        "title": "Gaming Live",
+        "category": "Gaming",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/video/upload/v1764398076/neonpixel/videos/Gaming/ixoyzey6e75dgouakdef.mp4",
+        "type": "video",
+        "res": "1080p"
+    },
+    {
+        "title": "Cyberpunk Live",
+        "category": "Cyberpunk",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/video/upload/v1764398078/neonpixel/videos/Cyberpunk/zmdwdrktrfojj3ubmvt7.mp4",
+        "type": "video",
+        "res": "1080p"
+    },
+    {
+        "title": "Abstract Live",
+        "category": "Abstract",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/video/upload/v1764398079/neonpixel/videos/Abstract/g1otcumxvlusbuz98nbu.mp4",
+        "type": "video",
+        "res": "1080p"
+    },
+    {
+        "title": "Technology Live",
+        "category": "Technology",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/video/upload/v1764398082/neonpixel/videos/Technology/ydz0pvjurdll2qtjlzii.mp4",
+        "type": "video",
+        "res": "1080p"
+    },
+    {
+        "title": "Nature Live",
+        "category": "Nature",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/video/upload/v1764398084/neonpixel/videos/Nature/p6hm8tepeh5hqzkxb0iz.mp4",
+        "type": "video",
+        "res": "1080p"
+    },
+    {
+        "title": "Anime Live",
+        "category": "Anime",
         "src": "https://res.cloudinary.com/detqsydqx/video/upload/v1764396186/neonpixel/videos/Anime/adcykzfyeaq6dzze0rld.mp4",
         "type": "video",
         "res": "1080p"
