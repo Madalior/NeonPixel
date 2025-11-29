@@ -2,52 +2,43 @@ name: Auto Update NeonPixel
 
 on:
   schedule:
-    - cron: "0 */12 * * *"   # Runs on schedule (or click)
-  workflow_dispatch:
+    - cron: "0 */6 * * *"   # Runs every 12 hours
+  workflow_dispatch:         # Allows manual run button
 
 jobs:
-  # This job executes the bot 10 times with pauses
-  runner:
+  build:
     runs-on: ubuntu-latest
-    # Create a loop for the runner job itself
-    strategy:
-      fail-fast: false
-      matrix:
-        run_number: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] # Run 10 times
-
     permissions:
-      contents: write
+      contents: write        # Critical for saving data
     
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        
-      - name: Install FFmpeg (Needed for Videos)
-        run: sudo apt-get install -y ffmpeg
+        with:
+          fetch-depth: 0     # Fetch full history for git syncing
 
-      - name: Setup Python & Install
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - run: pip install -r requirements.txt
 
-      # --- 1. RUN THE BOT (Downloads 1 Image and 1 Video) ---
-      - name: Run Bot (Batch ${{ matrix.run_number }})
-        env:
-          WALLHAVEN_API_KEY: ${{ secrets.WALLHAVEN_API_KEY }}
-        run: python cloud_bot.py
+      - name: Install Libraries
+        run: pip install -r requirements.txt
 
-      # --- 2. COMMIT & PUSH CHANGES ---
-      - name: Commit & Push Changes
+      - name: Install FFmpeg
+        run: sudo apt-get install -y ffmpeg
+
+      - name: Configure Git
         run: |
           git config --global user.name "NeonPixel AI"
           git config --global user.email "bot@neonpixel.com"
-          
-          git add data/cloud_wallpapers.json data/videos.json wallpapers videos
-          git commit -m "🤖 Batch ${{ matrix.run_number }}: New Assets" || echo "No new assets to commit"
-          git push
 
-      # --- 3. PAUSE FOR 30 SECONDS (Only between batches) ---
-      - name: Wait for 30 Seconds
-        # This will pause the workflow before the next batch starts
-        run: sleep 30
+      - name: Run AI Cloud Bot
+        env:
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          WALLHAVEN_API_KEY: ${{ secrets.WALLHAVEN_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python cloud_bot.py
