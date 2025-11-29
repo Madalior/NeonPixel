@@ -3,366 +3,432 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeonPixel | Royal Collection</title>
+    <title>NeonPixel | Imperial Edition</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. ROYAL VARIABLES --- */
+        /* --- 0. MODERN RESET & VARIABLES --- */
         :root {
-            --bg-deep: #050505;
-            --bg-panel: rgba(20, 20, 20, 0.8);
-            --gold-primary: #D4AF37; /* Standard Gold */
-            --gold-light: #F2D266;   /* Shiny Gold */
-            --gold-dark: #AA8C2C;    /* Deep Gold */
-            --text-main: #f0f0f0;
-            --text-muted: #a0a0a0;
-            --shadow-gold: 0 4px 30px rgba(212, 175, 55, 0.15);
+            --bg-deep: #030303;
+            --gold-primary: #bf953f;
+            --gold-sheen: #fcf6ba; /* The highlight color */
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --glass-panel: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-muted: #888888;
             --font-royal: 'Cinzel', serif;
-            --font-body: 'Raleway', sans-serif;
+            --font-modern: 'Montserrat', sans-serif;
+            --ease-elastic: cubic-bezier(0.19, 1, 0.22, 1); /* Super smooth easing */
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Hide default cursor */ }
         
         body {
-            font-family: var(--font-body);
             background-color: var(--bg-deep);
             color: var(--text-main);
+            font-family: var(--font-modern);
             overflow-x: hidden;
+            /* Custom Scrollbar */
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-primary) #111;
         }
 
-        /* --- 2. CINEMATIC VIDEO BANNER --- */
-        .hero-section {
-            position: relative;
-            height: 70vh; /* Takes up 70% of screen */
-            width: 100%;
+        /* --- 1. ATMOSPHERE (Noise & Cursor) --- */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05; pointer-events: none; z-index: 9998;
+        }
+
+        /* The Custom Cursor */
+        .cursor-dot, .cursor-circle {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 9999; border-radius: 50%;
+        }
+        .cursor-dot { width: 8px; height: 8px; background: var(--gold-primary); }
+        .cursor-circle {
+            width: 40px; height: 40px; border: 1px solid rgba(191, 149, 63, 0.5);
+            transition: width 0.3s, height 0.3s, background 0.3s;
+        }
+        /* Hover state for cursor */
+        body.hovering .cursor-circle { width: 60px; height: 60px; background: rgba(191, 149, 63, 0.1); border-color: var(--gold-sheen); }
+
+        /* --- 2. HERO SECTION (Cinematic) --- */
+        .hero {
+            position: relative; height: 85vh; width: 100%;
+            display: flex; align-items: center; justify-content: center;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            border-bottom: 2px solid var(--gold-dark);
         }
-
-        /* The Background Video */
+        
         .hero-video {
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 100%; height: 100%;
-            object-fit: cover;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            opacity: 0.6; /* Dimmed slightly for text readability */
+            position: absolute; width: 100%; height: 100%; object-fit: cover;
+            filter: grayscale(100%) contrast(1.2) brightness(0.6);
+            transition: 1s ease;
         }
-
-        /* Dark Overlay on Video */
-        .hero-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(5,5,5,1) 90%);
-            z-index: 1;
-        }
+        .hero:hover .hero-video { filter: grayscale(0%) contrast(1.1) brightness(0.8); }
 
         .hero-content {
-            position: relative; z-index: 2;
-            padding: 20px;
-            animation: fadeUp 1.5s ease-out;
+            z-index: 2; text-align: center; mix-blend-mode: overlay;
         }
 
         h1 {
-            font-family: var(--font-royal);
-            font-size: 4rem;
-            background: linear-gradient(to right, var(--gold-light), var(--gold-primary), var(--gold-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            font-family: var(--font-royal); font-size: 6vw;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 0.5rem; line-height: 1;
+            opacity: 0; animation: revealUp 1.2s var(--ease-elastic) forwards 0.5s;
         }
 
-        p.subtitle {
-            font-size: 1.1rem; letter-spacing: 2px; color: var(--text-muted);
-            text-transform: uppercase; margin-bottom: 30px;
+        .subtitle {
+            font-family: var(--font-modern); font-weight: 300; letter-spacing: 4px;
+            font-size: 1rem; color: #fff; margin-top: 20px; text-transform: uppercase;
+            opacity: 0; animation: revealUp 1.2s var(--ease-elastic) forwards 0.8s;
         }
 
-        /* --- 3. PREMIUM NAVIGATION (Floating) --- */
+        /* --- 3. GLASS NAVIGATION --- */
         nav {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 600px;
-            background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 50px;
-            padding: 10px 30px;
+            position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
+            width: auto; padding: 10px 10px;
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px; z-index: 1000;
+            display: flex; gap: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .nav-btn {
+            background: transparent; border: none; color: #888;
+            padding: 12px 30px; border-radius: 50px;
+            font-family: var(--font-modern); font-weight: 600; text-transform: uppercase;
+            font-size: 0.8rem; letter-spacing: 1px; transition: 0.4s var(--ease-elastic);
+        }
+        .nav-btn.active { background: var(--text-main); color: #000; }
+        .nav-btn:hover:not(.active) { color: #fff; }
+
+        /* --- 4. INTERFACE CONTROLS --- */
+        .controls {
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 60px 5vw; flex-wrap: wrap; gap: 30px;
         }
 
-        .nav-logo { font-family: var(--font-royal); font-weight: 700; color: var(--gold-primary); letter-spacing: 1px; }
-        
-        .nav-tabs button {
-            background: transparent; border: none; color: var(--text-muted);
-            font-family: var(--font-body); font-weight: 600; text-transform: uppercase;
-            letter-spacing: 1px; padding: 8px 16px; cursor: pointer; transition: 0.4s;
+        .search-wrapper {
+            position: relative; width: 100%; max-width: 400px;
         }
-        .nav-tabs button.active { color: var(--gold-light); text-shadow: 0 0 10px var(--gold-primary); }
+        .search-input {
+            width: 100%; background: var(--glass-panel); border: 1px solid var(--glass-border);
+            padding: 15px 20px; border-radius: 8px; color: white;
+            font-family: var(--font-modern); font-size: 1rem; transition: 0.3s;
+        }
+        .search-input:focus { border-color: var(--gold-primary); box-shadow: 0 0 20px rgba(191, 149, 63, 0.2); }
 
-        /* --- 4. CONTROLS (Search & Device) --- */
-        .controls-bar {
-            display: flex; justify-content: center; gap: 20px;
-            padding: 40px 20px; flex-wrap: wrap;
+        .filters { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .filter-chip {
+            background: var(--glass-panel); border: 1px solid var(--glass-border);
+            color: var(--text-muted); padding: 8px 20px; border-radius: 4px;
+            font-family: var(--font-royal); font-size: 0.8rem; white-space: nowrap;
+            transition: 0.3s;
         }
-
-        .device-switch {
-            display: flex; background: var(--bg-panel); border: 1px solid #333;
-            border-radius: 8px; padding: 4px;
-        }
-        .dev-btn {
-            background: transparent; border: none; color: #666; padding: 10px 25px;
-            cursor: pointer; transition: 0.3s; font-family: var(--font-royal);
-        }
-        .dev-btn.active {
-            background: var(--gold-dark); color: #000; font-weight: bold;
+        .filter-chip:hover, .filter-chip.active {
+            border-color: var(--gold-primary); color: var(--gold-primary); background: rgba(191, 149, 63, 0.05);
         }
 
-        .search-box {
-            position: relative; width: 300px;
+        /* --- 5. THE ROYAL GRID --- */
+        .grid-container {
+            column-count: 4; column-gap: 20px; padding: 0 5vw 100px;
         }
-        .search-box input {
-            width: 100%; background: transparent; border: none;
-            border-bottom: 1px solid var(--gold-dark); color: white;
-            padding: 10px 30px 10px 5px; font-family: var(--font-body);
-            font-size: 1rem; transition: 0.3s;
-        }
-        .search-box input:focus { border-bottom: 1px solid var(--gold-light); box-shadow: 0 10px 20px -10px var(--gold-primary); }
-        .search-icon { position: absolute; right: 0; top: 10px; color: var(--gold-dark); }
-
-        /* --- 5. LUXURY CATEGORIES --- */
-        .cat-scroll {
-            display: flex; justify-content: center; gap: 15px; padding-bottom: 30px;
-            overflow-x: auto; scrollbar-width: none;
-        }
-        .cat-btn {
-            background: transparent; border: 1px solid #333; color: #888;
-            padding: 8px 24px; font-family: var(--font-royal); font-size: 0.8rem;
-            letter-spacing: 1px; cursor: pointer; transition: 0.3s;
-        }
-        .cat-btn:hover { border-color: var(--gold-dark); color: var(--gold-light); }
-        .cat-btn.active { border-color: var(--gold-primary); color: var(--gold-primary); box-shadow: var(--shadow-gold); }
-
-        /* --- 6. SUB CATEGORIES (Minimal) --- */
-        .sub-scroll {
-            display: flex; justify-content: center; gap: 10px; padding-bottom: 20px;
-            min-height: 40px; opacity: 0; transition: 0.5s;
-        }
-        .sub-scroll.show { opacity: 1; }
-        .sub-btn {
-            font-size: 0.75rem; color: #666; background: transparent; border: none;
-            cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .sub-btn.active { color: var(--gold-light); text-decoration: underline; }
-
-        /* --- 7. MASONRY GRID --- */
-        .gallery { column-count: 4; column-gap: 20px; padding: 0 5%; }
-        @media(max-width: 1200px) { .gallery { column-count: 3; } }
-        @media(max-width: 768px) { .gallery { column-count: 2; } }
-        @media(max-width: 500px) { .gallery { column-count: 1; } }
+        @media(max-width: 1200px){ .grid-container{ column-count: 3; }}
+        @media(max-width: 800px){ .grid-container{ column-count: 2; }}
+        @media(max-width: 500px){ .grid-container{ column-count: 1; }}
 
         .card {
             break-inside: avoid; margin-bottom: 20px; position: relative;
-            background: #111; overflow: hidden; cursor: pointer;
-            border: 1px solid #222; transition: 0.4s ease;
+            border-radius: 0px; overflow: hidden;
+            /* Initial state for animation */
+            opacity: 0; transform: translateY(40px);
+            animation: cardEntrance 0.8s var(--ease-elastic) forwards;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--gold-dark);
-            box-shadow: var(--shadow-gold);
-        }
-        
-        .card img, .card video { width: 100%; display: block; opacity: 0.8; transition: 0.4s; }
-        .card:hover img { opacity: 1; }
 
-        .card-info {
-            position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px;
-            background: linear-gradient(transparent, #000);
-            opacity: 0; transition: 0.3s;
+        .card img, .card video {
+            width: 100%; display: block; transition: transform 0.7s var(--ease-elastic), opacity 0.4s;
+            opacity: 0.85;
         }
-        .card:hover .card-info { opacity: 1; }
         
+        /* Modern Hover Effect */
+        .card:hover img, .card:hover video {
+            transform: scale(1.05); opacity: 1;
+        }
+        
+        .card-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            transform: translateY(100%); transition: 0.4s var(--ease-elastic);
+        }
+        .card:hover .card-overlay { transform: translateY(0); }
+
         .card-title {
-            font-family: var(--font-royal); font-size: 0.8rem; color: var(--gold-light);
+            font-family: var(--font-royal); color: var(--gold-sheen); font-size: 1rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
-        /* --- 8. MODAL (Pop-up) --- */
+        /* --- 6. PREVIEW MODAL --- */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 2000; display: none;
-            justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
+            z-index: 10000; opacity: 0; pointer-events: none;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.4s;
         }
-        .modal.active { display: flex; animation: fadeIn 0.3s; }
-        .modal-box { text-align: center; max-width: 90%; }
-        .modal-box img, .modal-box video { 
-            max-height: 80vh; max-width: 100%; border: 1px solid var(--gold-dark); 
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+        .modal.active { opacity: 1; pointer-events: all; }
+        
+        .modal-content {
+            max-width: 90vw; max-height: 85vh; position: relative;
+            box-shadow: 0 0 100px rgba(191, 149, 63, 0.15);
+            border: 1px solid #333;
         }
-        .dl-btn {
-            display: inline-block; margin-top: 20px; padding: 12px 40px;
-            background: transparent; border: 1px solid var(--gold-primary);
-            color: var(--gold-primary); text-decoration: none; text-transform: uppercase;
-            font-family: var(--font-royal); letter-spacing: 2px; transition: 0.3s;
+        .modal-content img, .modal-content video {
+            max-width: 100%; max-height: 85vh; display: block;
         }
-        .dl-btn:hover { background: var(--gold-primary); color: #000; box-shadow: var(--shadow-gold); }
-        .close-modal { position: absolute; top: 30px; right: 30px; color: white; font-size: 2rem; cursor: pointer; }
+        
+        .modal-actions {
+            position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px;
+        }
+        .action-btn {
+            background: var(--text-main); color: #000; padding: 12px 30px;
+            text-decoration: none; font-family: var(--font-modern); font-weight: bold;
+            text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .action-btn:hover { background: var(--gold-primary); }
 
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Animations */
+        @keyframes revealUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes cardEntrance { to { opacity: 1; transform: translateY(0); } }
 
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="nav-logo">NEONPIXEL</div>
-        <div class="nav-tabs">
-            <button class="active" onclick="setTab('wallpapers')">Gallery</button>
-            <button onclick="setTab('videos')">Motion</button>
-        </div>
+    <div class="noise-overlay"></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <nav class="magnetic-wrap">
+        <button class="nav-btn active" onclick="setTab('wallpapers', this)">Gallery</button>
+        <button class="nav-btn" onclick="setTab('videos', this)">Motion</button>
     </nav>
 
-    <section class="hero-section">
+    <section class="hero">
         <video class="hero-video" autoplay muted loop playsinline>
             <source src="https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_24fps.mp4" type="video/mp4">
         </video>
-        
-        <div class="hero-overlay"></div>
-        
         <div class="hero-content">
-            <h1>The Royal Collection</h1>
-            <p class="subtitle">Exquisite 4K Visuals Curated by AI</p>
+            <h1>The Imperial<br>Collection</h1>
+            <p class="subtitle">Curated by Artificial Intelligence</p>
         </div>
     </section>
 
-    <div class="controls-bar">
-        <div class="device-switch">
-            <button class="dev-btn active" id="d-mobile" onclick="setDevice('mobile')">MOBILE</button>
-            <button class="dev-btn" id="d-desktop" onclick="setDevice('desktop')">DESKTOP</button>
+    <div class="controls">
+        <div class="search-wrapper">
+            <input type="text" class="search-input" id="search" placeholder="Search Artifacts..." onkeyup="render()">
         </div>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search Collection..." onkeyup="render()">
-            <i class="fa-solid fa-search search-icon"></i>
-        </div>
+        <div class="filters" id="cat-filters">
+            </div>
     </div>
 
-    <div class="cat-scroll" id="mainCats"></div>
-    <div class="sub-scroll" id="subCats"></div>
+    <div class="grid-container" id="grid">
+        </div>
 
-    <div class="gallery" id="grid"></div>
-
-    <div class="modal" id="modal">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <div class="modal-box">
+    <div class="modal" id="modal" onclick="closeModal(event)">
+        <div class="modal-content">
             <div id="m-preview"></div>
-            <a href="#" id="m-dl" class="dl-btn" download target="_blank">Download Original</a>
+            <div class="modal-actions">
+                <a href="#" id="m-dl" class="action-btn" download target="_blank">Download</a>
+                <button class="action-btn" style="background:transparent; color:#fff; border:1px solid #555" onclick="closeModalForce()">Close</button>
+            </div>
         </div>
     </div>
 
     <script>
-        let data = { wallpapers: [], videos: [] };
-        let state = { tab: 'wallpapers', device: 'mobile', cat: 'All', sub: 'All' };
+        // --- DATA SIMULATION ---
+        const CATEGORIES = ["All", "Abstract", "Cyberpunk", "Nature", "Royal", "Dark"];
         
-        const SUB_MAP = {
-            "Anime": ["All", "Naruto", "One Piece", "Dragon Ball", "Jujutsu Kaisen", "Demon Slayer", "Solo Leveling"],
-            "Cars": ["All", "BMW", "Porsche", "Ferrari", "Lamborghini", "GTR", "JDM"],
-            "Gaming": ["All", "Valorant", "Elden Ring", "Cyberpunk 2077", "GTA", "Minecraft"],
-            "Nature": ["All", "Ocean", "Forest", "Mountain", "Space", "Rain"],
-            "Cyberpunk": ["All", "Neon", "City", "Robot", "Future"],
-            "Abstract": ["All", "Dark", "Gold", "Fluid", "Geometric"]
+        let state = {
+            tab: 'wallpapers',
+            cat: 'All',
+            data: { wallpapers: [], videos: [] }
         };
-        const MAIN_CATS = ["All", ...Object.keys(SUB_MAP)];
 
+        // --- 1. INITIALIZATION ---
         window.onload = async () => {
-            renderCats();
+            initCursor();
+            renderFilters();
+            
+            // Simulating fetching your data
             try {
-                const [w, v] = await Promise.all([
-                    fetch("data/cloud_wallpapers.json").then(r=>r.json()), 
-                    fetch("data/videos.json").then(r=>r.json())
-                ]);
-                data.wallpapers = w.map(i => ({...i, subcategory: i.subcategory || "General", device: i.device || "mobile"}));
-                data.videos = v.map(i => ({...i, subcategory: i.subcategory || "General", device: "mobile"}));
+                // In real use, keep your fetch() calls here. 
+                // I will mock data for the demo so it works immediately for you.
+                const mockImages = Array.from({length: 12}, (_, i) => ({
+                    src: `https://picsum.photos/600/${800 + (i*10)}?random=${i}`, // Random heights for masonry
+                    category: CATEGORIES[Math.floor(Math.random() * (CATEGORIES.length - 1)) + 1],
+                    title: "Royal Artifact " + (i+1),
+                    type: 'image'
+                }));
+                const mockVideos = Array.from({length: 6}, (_, i) => ({
+                    src: "https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_25fps.mp4",
+                    category: "Nature",
+                    title: "Motion " + (i+1),
+                    type: 'video'
+                }));
+
+                // Attempt real fetch, fall back to mock if files missing
+                try {
+                    const [w, v] = await Promise.all([
+                        fetch("data/cloud_wallpapers.json").then(r=>r.json()), 
+                        fetch("data/videos.json").then(r=>r.json())
+                    ]);
+                    state.data.wallpapers = w;
+                    state.data.videos = v;
+                } catch(e) {
+                    console.warn("Using Mock Data (JSON files not found)");
+                    state.data.wallpapers = mockImages;
+                    state.data.videos = mockVideos;
+                }
+
                 render();
-            } catch(e) { console.log(e); }
+            } catch(e) { console.error(e); }
         };
 
+        // --- 2. RENDERING ENGINE ---
         function render() {
             const grid = document.getElementById('grid');
-            const source = state.tab === 'wallpapers' ? data.wallpapers : data.videos;
-            
+            const source = state.tab === 'wallpapers' ? state.data.wallpapers : state.data.videos;
+            const searchVal = document.getElementById('search').value.toLowerCase();
+
             const filtered = source.filter(item => {
-                const devMatch = (state.tab === 'videos') ? true : (item.device === state.device);
-                const catMatch = (state.cat === 'All') || (item.category === state.cat);
-                const subMatch = (state.sub === 'All') || (item.subcategory === state.sub);
-                const searchMatch = item.title.toLowerCase().includes(document.getElementById('searchInput').value.toLowerCase());
-                return devMatch && catMatch && subMatch && searchMatch;
+                const catMatch = state.cat === 'All' || (item.category || item.subcategory) === state.cat;
+                const searchMatch = (item.title || "Untitled").toLowerCase().includes(searchVal);
+                return catMatch && searchMatch;
             });
 
-            if(!filtered.length) { grid.innerHTML = `<p style="text-align:center;width:100%;color:#666;font-family:var(--font-royal);">No artifacts found.</p>`; return; }
+            // Clear Grid
+            grid.innerHTML = '';
 
-            grid.innerHTML = filtered.map(item => `
-                <div class="card" onclick='openModal(${JSON.stringify(item)})'>
-                    ${item.type === 'image' 
-                        ? `<img src="${item.src.replace('/upload/', '/upload/w_500,f_auto,q_auto/')}" loading="lazy">` 
-                        : `<video src="${item.src}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`
-                    }
-                    <div class="card-info">
-                        <div class="card-title">${item.subcategory}</div>
+            if(!filtered.length) {
+                grid.innerHTML = `<div style="text-align:center; grid-column: 1/-1; padding:50px; color:#555">NO ARTIFACTS FOUND</div>`;
+                return;
+            }
+
+            // Staggered Animation Render
+            filtered.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                // Add staggered delay based on index (Smoothness factor)
+                card.style.animationDelay = `${index * 100}ms`; 
+                
+                // Add hover effect for cursor
+                card.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                card.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+                
+                card.onclick = () => openModal(item);
+
+                const content = item.type === 'image' 
+                    ? `<img src="${item.src}" loading="lazy" alt="${item.title}">`
+                    : `<video src="${item.src}" muted loop onmouseenter="this.play()" onmouseleave="this.pause()"></video>`;
+
+                card.innerHTML = `
+                    ${content}
+                    <div class="card-overlay">
+                        <div class="card-title">${item.category || "General"}</div>
                     </div>
-                </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderFilters() {
+            const container = document.getElementById('cat-filters');
+            container.innerHTML = CATEGORIES.map(cat => `
+                <button class="filter-chip ${cat === state.cat ? 'active' : ''}" 
+                        onclick="setCat('${cat}', this)">${cat}</button>
             `).join('');
         }
 
-        function renderCats() {
-            document.getElementById('mainCats').innerHTML = MAIN_CATS.map(cat => `
-                <button class="cat-btn ${cat === state.cat ? 'active' : ''}" onclick="setCat('${cat}')">${cat}</button>
-            `).join('');
-            renderSubCats();
+        // --- 3. STATE MANAGEMENT ---
+        function setTab(t, btn) {
+            state.tab = t;
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            render();
         }
 
-        function renderSubCats() {
-            const sc = document.getElementById('subCats');
-            if (state.cat === 'All' || !SUB_MAP[state.cat]) { sc.className = "sub-scroll"; return; }
-            sc.className = "sub-scroll show";
-            sc.innerHTML = SUB_MAP[state.cat].map(sub => `
-                <button class="sub-btn ${sub === state.sub ? 'active' : ''}" onclick="setSub('${sub}')">${sub}</button>
-            `).join('');
+        function setCat(c, btn) {
+            state.cat = c;
+            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            render();
         }
 
-        function setTab(t) { 
-            state.tab = t; 
-            document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            render(); 
-        }
-        function setDevice(d) { state.device = d; updateActive('.dev-btn'); render(); }
-        function setCat(c) { state.cat = c; state.sub = 'All'; renderCats(); render(); }
-        function setSub(s) { state.sub = s; renderSubCats(); render(); }
-        
-        function updateActive(sel) {
-            document.querySelectorAll(sel).forEach(b => b.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-
+        // --- 4. MODAL LOGIC ---
         function openModal(item) {
             const m = document.getElementById('modal');
             const p = document.getElementById('m-preview');
             const d = document.getElementById('m-dl');
-            p.innerHTML = item.type === 'image' ? `<img src="${item.src}">` : `<video src="${item.src}" controls autoplay loop></video>`;
+            
+            p.innerHTML = item.type === 'image' 
+                ? `<img src="${item.src}">` 
+                : `<video src="${item.src}" controls autoplay loop></video>`;
             d.href = item.src;
             m.classList.add('active');
         }
-        function closeModal() { document.getElementById('modal').classList.remove('active'); document.getElementById('m-preview').innerHTML = ''; }
-        document.getElementById('modal').addEventListener('click', (e) => { if(e.target.id === 'modal') closeModal(); });
+
+        function closeModal(e) { if(e.target.id === 'modal') closeModalForce(); }
+        function closeModalForce() { 
+            const m = document.getElementById('modal');
+            m.classList.remove('active'); 
+            setTimeout(() => document.getElementById('m-preview').innerHTML = '', 400); // Clear after fade
+        }
+
+        // --- 5. SMOOTH CURSOR ---
+        function initCursor() {
+            const dot = document.querySelector('.cursor-dot');
+            const circle = document.querySelector('.cursor-circle');
+            
+            let mouseX = 0, mouseY = 0;
+            let circleX = 0, circleY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                // Dot moves instantly
+                dot.style.left = mouseX + 'px';
+                dot.style.top = mouseY + 'px';
+            });
+
+            // Circle follows with delay (Smooth Lerp)
+            function animate() {
+                const speed = 0.15; // Lower is smoother/slower
+                circleX += (mouseX - circleX) * speed;
+                circleY += (mouseY - circleY) * speed;
+                
+                circle.style.left = circleX + 'px';
+                circle.style.top = circleY + 'px';
+                
+                requestAnimationFrame(animate);
+            }
+            animate();
+            
+            // Interactive elements trigger cursor grow
+            const interactives = document.querySelectorAll('button, a, input');
+            interactives.forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+            });
+        }
     </script>
 </body>
 </html>
