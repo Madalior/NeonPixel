@@ -1,6 +1,231 @@
 [
     {
         "title": "General Wallpaper",
+        "category": "Gaming",
+        "subcategory": "General",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455273/neonpixel/desktop/Gaming/r0oeaai3fl3wqgbgaqox.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Gaming",
+        "subcategory": "General",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455263/neonpixel/desktop/Gaming/ag2oelcm1hgnhzbvxv3u.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Technology",
+        "subcategory": "General",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455252/neonpixel/desktop/Technology/xh7lsxykmra1gnkhgfv5.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Nature",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455241/neonpixel/mobile/Nature/lrfxzcxzfcl5easlar9n.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Abstract",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455230/neonpixel/mobile/Abstract/yg5txqgfsbwkpmxioqgl.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Cars",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455219/neonpixel/mobile/Cars/rwzpmfza3apenesldt5q.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Nature",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455207/neonpixel/mobile/Nature/meoxuqzaix8qrwdiw2iq.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Cars",
+        "subcategory": "General",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455196/neonpixel/desktop/Cars/pvh4bsbqaelvid2pal7w.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Anime",
+        "subcategory": "General",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455184/neonpixel/desktop/Anime/inpygy3aemesdmnmc29d.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Abstract",
+        "subcategory": "General",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455172/neonpixel/desktop/Abstract/lbzgmdns961sioyhsbwq.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Nature",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455161/neonpixel/mobile/Nature/ipojnbd1beve3wpgdnxq.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Abstract",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455150/neonpixel/mobile/Abstract/iyfianfev3xyufoztaon.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Technology",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455135/neonpixel/mobile/Technology/nw9r56ticnvcp2qr03if.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Nature",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455123/neonpixel/mobile/Nature/ag9h6epbp8vbmjckumvn.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Cars",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455112/neonpixel/mobile/Cars/catuyzd93hf0cpthcbez.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Gaming",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455101/neonpixel/mobile/Gaming/epa0owsgev2mkxya5kq1.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Anime",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455090/neonpixel/mobile/Anime/ihpxdlga8i7gah3wcmbr.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Technology",
+        "subcategory": "General",
+        "device": "desktop",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455079/neonpixel/desktop/Technology/xwuhuom82aduvrfbsmyk.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Cyberpunk",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455063/neonpixel/mobile/Cyberpunk/dppwiwyx43wvld79qxnd.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Anime",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455052/neonpixel/mobile/Anime/slbqemahxp1xtg3p051l.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Abstract",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455037/neonpixel/mobile/Abstract/vak6fiz2f46o2jckfuuc.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Anime",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455016/neonpixel/mobile/Anime/qxbmk0fu4mktgmijawuc.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Cyberpunk",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764455004/neonpixel/mobile/Cyberpunk/spcowt3opbhpbh6i7diq.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Cars",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764454993/neonpixel/mobile/Cars/rfb2uqv8ot3tac9rmxmh.png",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
+        "category": "Gaming",
+        "subcategory": "General",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764454983/neonpixel/mobile/Gaming/yocwf7n0wwldzuwyhtdz.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "General Wallpaper",
         "category": "Technology",
         "subcategory": "General",
         "device": "mobile",
@@ -4271,231 +4496,6 @@
         "subcategory": "General",
         "device": "mobile",
         "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448150/neonpixel/mobile/Gaming/zjpcvp3g3u4ews3r3ze4.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Nature",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448139/neonpixel/mobile/Nature/ynysizlzw78fma5tojp9.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Anime",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448126/neonpixel/mobile/Anime/eet2ki6gphvauhpvf5e1.png",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Cyberpunk",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448114/neonpixel/desktop/Cyberpunk/v5qy5xmjuutrbedgejnz.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Cars",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448104/neonpixel/mobile/Cars/f4zg7lpzki8w8ggliifp.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Cyberpunk",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448092/neonpixel/desktop/Cyberpunk/f5rstmrm7cmzu771bybm.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Gaming",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448081/neonpixel/desktop/Gaming/cgldnglxpg1gw1ite6cy.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Anime",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448070/neonpixel/desktop/Anime/at8ojfaro2eadknut64e.png",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Nature",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448058/neonpixel/desktop/Nature/waroorpiflhbzhbhlrrl.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Technology",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448044/neonpixel/mobile/Technology/bgtaqhjkidlaaesmzeh0.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Cyberpunk",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448033/neonpixel/desktop/Cyberpunk/fy7zeccyjkq6djpei7d3.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Gaming",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764448022/neonpixel/desktop/Gaming/c23n27nfcg3popdw8x8e.png",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Abstract",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447950/neonpixel/desktop/Abstract/ajpt4re8uhlekezhkw7l.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Cars",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447937/neonpixel/mobile/Cars/tldeuayu1ab5rgpnmaya.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Cyberpunk",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447925/neonpixel/mobile/Cyberpunk/qgskulbnybmmt80ctc6i.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Technology",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447914/neonpixel/mobile/Technology/lfcvvayuqqafxnayi2mp.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Cars",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447903/neonpixel/mobile/Cars/aavtvfge8im8d6p6nv9h.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Cyberpunk",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447892/neonpixel/mobile/Cyberpunk/erx2bqwalybvsyzhvxhi.png",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Technology",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447881/neonpixel/desktop/Technology/jqsft4txljudtewqvhd6.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Anime",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447870/neonpixel/mobile/Anime/d1jvgchlspzfw6vz6x7k.png",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Nature",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447858/neonpixel/mobile/Nature/jhmcf2jcguaiyx3xavml.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Technology",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447842/neonpixel/desktop/Technology/pobursxcsfxf38zyllmi.png",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Cars",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447831/neonpixel/mobile/Cars/qrkcdfruvwmfyvmmpbba.png",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Anime",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447820/neonpixel/desktop/Anime/qpvfqqlvnxcwnhqp7ntl.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Gaming",
-        "subcategory": "General",
-        "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447809/neonpixel/desktop/Gaming/t4p5zk5oj5npu39nlnjh.jpg",
-        "type": "image",
-        "res": "4K"
-    },
-    {
-        "title": "General Wallpaper",
-        "category": "Technology",
-        "subcategory": "General",
-        "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764447794/neonpixel/mobile/Technology/dapayhwbh1ngkewizh3w.jpg",
         "type": "image",
         "res": "4K"
     }
