@@ -11,9 +11,10 @@ import yt_dlp
 from github import Github
 
 # --- CONFIGURATION ---
-MAX_STORAGE_LIMIT = 20 * 1024 * 1024 * 1024  # 20 GB (For Cloudinary)
+MAX_STORAGE_LIMIT = 20 * 1024 * 1024 * 1024  # 20 GB (Cloudinary Limit)
+MAX_RUNTIME_SECONDS = 5.5 * 60 * 60          # 5.5 Hours (GitHub Action Limit)
 CATEGORIES = ["Anime", "Cars", "Nature", "Gaming", "Cyberpunk", "Abstract", "Technology"]
-RELEASE_TAG = "video-assets" # The tag name for your video storage release
+RELEASE_TAG = "video-assets"                 # Tag for GitHub Releases
 
 # Cloudinary Setup
 cloudinary.config(
@@ -22,27 +23,44 @@ cloudinary.config(
   api_secret = os.environ.get('CLOUDINARY_API_SECRET')
 )
 
+# --- 1. CHECK STORAGE ---
 def check_storage_space():
     try:
-        usage = cloudinary.api.usage().get('storage', {}).get('usage', 0)
-        if usage >= MAX_STORAGE_LIMIT: return False 
+        usage_data = cloudinary.api.usage()
+        current_usage = usage_data.get('storage', {}).get('usage', 0)
+        gb_used = round(current_usage / (1024 * 1024 * 1024), 2)
+        print(f"💾 Storage: {gb_used} GB / 20.0 GB")
+        
+        if current_usage >= MAX_STORAGE_LIMIT:
+            print("🛑 STORAGE FULL (20GB Reached). Stopping.")
+            return False 
         return True 
     except: return True 
 
-def save_json(filepath, new_data, limit=300):
+# --- 2. SAVE JSON ---
+def save_json(filepath, new_data, limit=500):
     os.makedirs("data", exist_ok=True)
-    existing = []
+    existing_data = []
     if os.path.exists(filepath):
-        try: existing = json.load(open(filepath, "r"))
-        except: pass
-    
-    if new_data:
-        final = new_data + existing
-        unique = {v['src']:v for v in final}.values()
-        with open(filepath, "w") as f: json.dump(list(unique)[:limit], f, indent=4)
-        print(f"✅ Updated {filepath}")
+        try:
+            with open(filepath, "r") as f:
+                existing_data = json.load(f)
+        except: existing_data = []
 
-# --- HELPER: GITHUB RELEASE UPLOAD ---
+    if not os.path.exists(filepath) and not new_data:
+        with open(filepath, "w") as f: json.dump([], f)
+        return
+
+    if new_data:
+        final_data = new_data + existing_data
+        # Remove duplicates
+        unique_data = {v['src']:v for v in final_data}.values()
+        final_list = list(unique_data)[:limit]
+        with open(filepath, "w") as f:
+            json.dump(final_list, f, indent=4)
+        print(f"✅ Updated {filepath} (+{len(new_data)} items)")
+
+# --- 3. HELPER: GITHUB RELEASE UPLOAD ---
 def upload_to_github_release(filepath, filename):
     try:
         token = os.environ.get("GITHUB_TOKEN")
@@ -50,114 +68,130 @@ def upload_to_github_release(filepath, filename):
         g = Github(token)
         repo = g.get_repo(repo_name)
         
-        # Get or Create Release
         try:
             release = repo.get_release(RELEASE_TAG)
         except:
-            print(f"   ✨ Creating new Release: {RELEASE_TAG}...")
-            release = repo.create_git_release(RELEASE_TAG, "Video Assets", "Storage for unlimited videos", prerelease=True)
+            print(f"   ✨ Creating Release: {RELEASE_TAG}...")
+            release = repo.create_git_release(RELEASE_TAG, "Video Assets", "Storage", prerelease=True)
 
-        print(f"   📤 Uploading {filename} to GitHub Releases...")
+        print(f"   📤 Uploading {filename} to GitHub...")
         asset = release.upload_asset(filepath, name=filename)
         return asset.browser_download_url
     except Exception as e:
-        print(f"   ❌ GitHub Upload Error: {e}")
+        print(f"   ❌ GitHub Error: {e}")
         return None
 
-# --- 1. WALLHAVEN (Images -> Cloudinary) ---
-def get_wallhaven(device_type):
-    ratio = "9x16" if device_type == "mobile" else "16x9"
-    print(f"🐉 Searching Wallhaven Images for {device_type}...")
+# --- 4. WALLHAVEN BATCH (Images -> Cloudinary) ---
+def download_wallhaven_batch():
     api_key = os.environ.get('WALLHAVEN_API_KEY')
-    items = []
+    new_items = []
     
-    for cat in CATEGORIES:
-        try:
-            url = "https://wallhaven.cc/api/v1/search"
-            params = {"q": cat, "purity": "100", "sorting": "toplist", "ratios": ratio, "apikey": api_key}
-            resp = requests.get(url, params=params).json()
-            if "data" in resp and resp["data"]:
-                limit = min(len(resp["data"]), 5)
-                img = resp["data"][random.randint(0, limit-1)]
-                print(f"   🚀 Uploading Image: {cat}...")
-                res = cloudinary.uploader.upload(img["path"], folder=f"neonpixel/{device_type}/{cat}", tags=[cat, device_type])
-                items.append({"title": f"{cat} {device_type}", "category": cat, "device": device_type, "src": res['secure_url'], "type": "image", "res": "4K"})
-            time.sleep(1)
-        except: pass
-    return items
-
-# --- 2. PINTEREST VIDEO (-> GitHub Releases) ---
-def get_pinterest_videos():
-    print("📌 Searching Pinterest Videos (Hacker Mode)...")
-    items = []
-    ddgs = DDGS()
+    # Pick RANDOM category and device to keep mixing content
+    cat = random.choice(CATEGORIES)
+    device = random.choice(["mobile", "desktop"])
+    ratio = "9x16" if device == "mobile" else "16x9"
     
-    # Configure yt-dlp to download to a temp file
-    temp_filename = "temp_video.mp4"
-    ydl_opts = {
-        'format': 'best',
-        'outtmpl': temp_filename,
-        'quiet': True,
-        'no_warnings': True,
-    }
-
-    for cat in CATEGORIES:
-        try:
-            query = f"site:pinterest.com/pin/ {cat} aesthetic video vertical"
-            results = list(ddgs.text(query, max_results=2))
-            
-            for res in results:
-                pin_url = res['href']
-                print(f"   🔍 Found Pin: {pin_url}")
-                
-                try:
-                    # Download locally
-                    if os.path.exists(temp_filename): os.remove(temp_filename)
-                    
-                    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                        ydl.extract_info(pin_url, download=True)
-                    
-                    if os.path.exists(temp_filename):
-                        # Create a unique name for the file
-                        unique_name = f"{cat}_{random.randint(1000,9999)}.mp4"
-                        
-                        # Upload to GitHub Releases
-                        download_url = upload_to_github_release(temp_filename, unique_name)
-                        
-                        if download_url:
-                            items.append({
-                                "title": f"{cat} Pinterest", 
-                                "category": cat, 
-                                "device": "mobile", 
-                                "src": download_url, # Direct GitHub Link
-                                "type": "video", 
-                                "res": "HD"
-                            })
-                        
-                        # Cleanup
-                        os.remove(temp_filename)
-                        break 
-                except Exception as e:
-                    print(f"      ⚠️ Failed: {e}")
-                    continue
-            time.sleep(2)
-        except Exception as e:
-            print(f"   ❌ Search Error {cat}: {e}")
-    return items
-
-# --- MAIN TASK ---
-if __name__ == "__main__":
-    if check_storage_space():
-        # Images (Wallhaven -> Cloudinary)
-        mob_wh = get_wallhaven("mobile")
-        desk_wh = get_wallhaven("desktop")
+    print(f"🐉 Fetching Wallhaven: {cat} ({device})...")
+    
+    try:
+        url = "https://wallhaven.cc/api/v1/search"
+        params = {"q": cat, "purity": "100", "sorting": "random", "ratios": ratio, "apikey": api_key}
+        resp = requests.get(url, params=params).json()
         
-        # Videos (Pinterest -> GitHub Releases)
-        videos = get_pinterest_videos()
+        if "data" in resp and len(resp["data"]) > 0:
+            img = resp["data"][0] # Take the first random result
+            print(f"   🚀 Uploading {cat}...")
+            
+            res = cloudinary.uploader.upload(img["path"], folder=f"neonpixel/{device}/{cat}", tags=[cat, device])
+            
+            new_items.append({
+                "title": f"{cat} {device}", 
+                "category": cat, 
+                "device": device, 
+                "src": res['secure_url'], 
+                "type": "image", 
+                "res": "4K"
+            })
+    except Exception as e:
+        print(f"   ❌ Wallhaven Error: {e}")
+        
+    return new_items
 
-        # Save
-        all_images = mob_wh + desk_wh
-        save_json("data/cloud_wallpapers.json", all_images, 300)
-        save_json("data/videos.json", videos, 50)
-    else:
-        print("💤 Storage full.")
+# --- 5. PINTEREST BATCH (Videos -> GitHub Releases) ---
+def download_pinterest_batch():
+    print("📌 Hunting Pinterest Video...")
+    new_items = []
+    ddgs = DDGS()
+    temp_file = "temp_vid.mp4"
+    ydl_opts = {'format': 'best', 'outtmpl': temp_file, 'quiet': True}
+    
+    cat = random.choice(CATEGORIES)
+    
+    try:
+        # Search DuckDuckGo
+        query = f"site:pinterest.com/pin/ {cat} aesthetic video vertical {random.randint(1, 1000)}"
+        results = list(ddgs.text(query, max_results=1))
+        
+        if results:
+            pin_url = results[0]['href']
+            print(f"   🔍 Found Pin: {pin_url}")
+            
+            # Download locally first
+            if os.path.exists(temp_file): os.remove(temp_file)
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.extract_info(pin_url, download=True)
+            
+            if os.path.exists(temp_file):
+                unique_name = f"{cat}_{random.randint(10000,99999)}.mp4"
+                
+                # Upload to GitHub (Unlimited Storage)
+                download_url = upload_to_github_release(temp_file, unique_name)
+                
+                if download_url:
+                    new_items.append({
+                        "title": f"{cat} Live", 
+                        "category": cat, 
+                        "device": "mobile", 
+                        "src": download_url, 
+                        "type": "video", 
+                        "res": "HD"
+                    })
+                
+                # Cleanup
+                os.remove(temp_file)
+    except Exception as e:
+        print(f"   ⚠️ Pinterest Skip: {e}")
+        
+    return new_items
+
+# --- MAIN LOOP ---
+if __name__ == "__main__":
+    start_time = time.time()
+    batch_count = 0
+    
+    print("🤖 STARTING ENDLESS DOWNLOAD LOOP...")
+    
+    while True:
+        # 1. Check Time Limit (Stop before GitHub kills us)
+        elapsed = time.time() - start_time
+        if elapsed > MAX_RUNTIME_SECONDS:
+            print("⏰ Time Limit Reached (5.5 Hours). Stopping.")
+            break
+            
+        # 2. Check Cloudinary Storage (Stop if 20GB full)
+        if not check_storage_space():
+            break
+            
+        # 3. Download Logic
+        # Always try images (Wallhaven)
+        images = download_wallhaven_batch()
+        if images: save_json("data/cloud_wallpapers.json", images, 500)
+        
+        # Try videos every 3rd loop (to save bandwidth/time)
+        if batch_count % 3 == 0:
+            videos = download_pinterest_batch()
+            if videos: save_json("data/videos.json", videos, 100)
+        
+        batch_count += 1
+        print(f"💤 Sleeping 15s... (Batch {batch_count} done)")
+        time.sleep(15) # Safety delay
