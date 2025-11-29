@@ -8,32 +8,46 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write        # PERMISSION FIX: Allows bot to save JSON files
     
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
-    - name: Install Dependencies
-      run: pip install requests pillow
+      - name: Install Libraries
+        run: pip install -r requirements.txt
 
-    - name: Run Wallpaper Bot
-      run: python bots/wallpaper_bot.py
+      - name: Run AI Cloud Bot
+        env:
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        run: python cloud_bot.py
 
-    - name: Run Video Bot
-      run: python bots/video_bot.py
-
-    - name: Generate JSON
-      run: python bots/generate_json.py
-
-    - name: Commit & Push
-      run: |
-        git config user.name "github-actions"
-        git config user.email "actions@github.com"
-        git add .
-        git commit -m "Auto update wallpapers" || echo "No changes"
-        git push
+      - name: Commit & Push Changes
+        run: |
+          git config --global user.name "NeonPixel AI"
+          git config --global user.email "bot@neonpixel.com"
+          
+          # --- SAFETY NET ---
+          # If bot failed to create files, create empty ones to prevent Git crash
+          if [ ! -f data/cloud_wallpapers.json ]; then
+            mkdir -p data
+            echo "[]" > data/cloud_wallpapers.json
+          fi
+          if [ ! -f data/videos.json ]; then
+            mkdir -p data
+            echo "[]" > data/videos.json
+          fi
+          
+          git add data/cloud_wallpapers.json data/videos.json
+          git commit -m "🤖 AI Auto-Update: New Assets" || echo "No changes to commit"
+          git push

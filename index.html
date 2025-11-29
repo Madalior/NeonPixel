@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* CSS REMAINS THE SAME AS YOUR ORIGINAL UPLOAD - IT WAS GOOD */
+        /* Keeping your original styling intact */
         :root { --bg-dark: #0a0a0a; --bg-card: #141414; --bg-hover: #1f1f1f; --accent: #00FFFF; --accent-glow: rgba(0, 255, 255, 0.4); --text-main: #ffffff; --text-muted: #a0a0a0; --radius-lg: 16px; --radius-md: 12px; --radius-sm: 8px; --shadow: 0 10px 30px rgba(0, 0, 0, 0.5); --nav-height: 70px; }
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         body { font-family: 'Outfit', sans-serif; background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; }
@@ -108,7 +108,6 @@
                         category: item.category,
                         type: "image",
                         src: item.src,
-                        // Optimize Cloudinary URL for thumbnail
                         thumb: item.src.includes('cloudinary') 
                                ? item.src.replace("/upload/", "/upload/w_500,f_auto,q_auto/") 
                                : item.src, 
@@ -126,7 +125,7 @@
                             title: item.title,
                             category: item.category,
                             type: "video",
-                            src: item.src, // Unified 'src' key
+                            src: item.src, 
                             res: "1080p"
                         }));
                     }
@@ -216,7 +215,6 @@
             if (item.type === 'image') {
                 preview.innerHTML = `<img src="${item.src}" alt="${item.title}">`;
             } else {
-                // FIXED: added playsinline and removed controls initially to ensure loop works smoothly
                 preview.innerHTML = `<video autoplay loop muted playsinline controls><source src="${item.src}" type="video/mp4"></video>`;
             }
             modal.classList.add('open');
@@ -226,7 +224,7 @@
         function closeModal() {
             document.getElementById('imageModal').classList.remove('open');
             document.body.style.overflow = 'auto';
-            document.getElementById('modalPreview').innerHTML = ''; // Stop video
+            document.getElementById('modalPreview').innerHTML = '';
         }
 
         document.getElementById('imageModal').addEventListener('click', (e) => {
