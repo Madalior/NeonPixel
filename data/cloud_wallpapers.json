@@ -1,1 +1,44 @@
-[]
+[
+    {
+        "title": "Anime Wallpaper",
+        "category": "Anime",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764396175/neonpixel/Anime/tfu4h12mcudwfbiuxqhj.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Cars Wallpaper",
+        "category": "Cars",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764396177/neonpixel/Cars/r9uo9iwagoyzbnsqfnde.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Nature Wallpaper",
+        "category": "Nature",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764396179/neonpixel/Nature/ra6r8rqr5z3lwo6cvkfk.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Gaming Wallpaper",
+        "category": "Gaming",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764396181/neonpixel/Gaming/sbllreazn8octjgrqgwx.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Cyberpunk Wallpaper",
+        "category": "Cyberpunk",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764396183/neonpixel/Cyberpunk/woucm9tfefet25lnmhuj.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
+        "title": "Abstract Wallpaper",
+        "category": "Abstract",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764396184/neonpixel/Abstract/ah4ccl93sibpebtzp1lk.jpg",
+        "type": "image",
+        "res": "4K"
+    }
+]
