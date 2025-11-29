@@ -1,9 +1,17 @@
 [
     {
+        "title": "Anime mobile",
+        "category": "Anime",
+        "device": "mobile",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400844/neonpixel/mobile/Anime/w0mwrenrl83xajynjh8i.jpg",
+        "type": "image",
+        "res": "4K"
+    },
+    {
         "title": "Nature mobile",
         "category": "Nature",
         "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400847/neonpixel/mobile/Nature/gq8wmhrkx9wrm7gmw2n6.jpg",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400847/neonpixel/mobile/Nature/fykplepij2vqdvsiwmmd.jpg",
         "type": "image",
         "res": "4K"
     },
@@ -11,7 +19,7 @@
         "title": "Gaming mobile",
         "category": "Gaming",
         "device": "mobile",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400849/neonpixel/mobile/Gaming/xhoujcdajgsjpp4cotdj.jpg",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400849/neonpixel/mobile/Gaming/utvaf5yioshnnlzntlnu.jpg",
         "type": "image",
         "res": "4K"
     },
@@ -19,7 +27,7 @@
         "title": "Anime desktop",
         "category": "Anime",
         "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400854/neonpixel/desktop/Anime/abeljgzcqs68h9iflg0m.jpg",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400854/neonpixel/desktop/Anime/hjlfrwuk5yrnu19hfpax.png",
         "type": "image",
         "res": "4K"
     },
@@ -27,7 +35,7 @@
         "title": "Cars desktop",
         "category": "Cars",
         "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400856/neonpixel/desktop/Cars/lnjhdbvgbzqdrm8biu8q.jpg",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400856/neonpixel/desktop/Cars/nhzszw9xs1mpzmuuu6nm.jpg",
         "type": "image",
         "res": "4K"
     },
@@ -35,7 +43,7 @@
         "title": "Nature desktop",
         "category": "Nature",
         "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400858/neonpixel/desktop/Nature/tgnjnkwpcmvkvwiyyvpn.png",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400857/neonpixel/desktop/Nature/wfej2psi5xutilxldy1a.jpg",
         "type": "image",
         "res": "4K"
     },
@@ -43,7 +51,7 @@
         "title": "Gaming desktop",
         "category": "Gaming",
         "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400860/neonpixel/desktop/Gaming/fu6yy6ofpvtt78idxbin.png",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400859/neonpixel/desktop/Gaming/ffk4a475z36l9liictai.png",
         "type": "image",
         "res": "4K"
     },
@@ -51,7 +59,7 @@
         "title": "Cyberpunk desktop",
         "category": "Cyberpunk",
         "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400862/neonpixel/desktop/Cyberpunk/kmj5mrchaihaw5mfzsok.jpg",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400861/neonpixel/desktop/Cyberpunk/u7foe2x5e1diwnxplszi.jpg",
         "type": "image",
         "res": "4K"
     },
@@ -59,7 +67,7 @@
         "title": "Abstract desktop",
         "category": "Abstract",
         "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400863/neonpixel/desktop/Abstract/qn9mnajqehwbny8q1kj9.png",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400863/neonpixel/desktop/Abstract/drxeyjjkp7sfqmjhl05j.jpg",
         "type": "image",
         "res": "4K"
     },
@@ -67,7 +75,7 @@
         "title": "Technology desktop",
         "category": "Technology",
         "device": "desktop",
-        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400865/neonpixel/desktop/Technology/sej48t3v6bajxs9aaccv.png",
+        "src": "https://res.cloudinary.com/detqsydqx/image/upload/v1764400865/neonpixel/desktop/Technology/vva0nfuilizofk6wqwyj.png",
         "type": "image",
         "res": "4K"
     }
