@@ -3,80 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeonPixel | Smart Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>NeonPixel | Royal Collection</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root { --bg: #0a0a0a; --card: #141414; --accent: #00FFFF; --text: #fff; --text-dim: #888; }
+        /* --- 1. ROYAL VARIABLES --- */
+        :root {
+            --bg-deep: #050505;
+            --bg-panel: rgba(20, 20, 20, 0.8);
+            --gold-primary: #D4AF37; /* Standard Gold */
+            --gold-light: #F2D266;   /* Shiny Gold */
+            --gold-dark: #AA8C2C;    /* Deep Gold */
+            --text-main: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --shadow-gold: 0 4px 30px rgba(212, 175, 55, 0.15);
+            --font-royal: 'Cinzel', serif;
+            --font-body: 'Raleway', sans-serif;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
-
-        nav { position: fixed; top: 0; width: 100%; height: 70px; background: rgba(10,10,10,0.9); backdrop-filter: blur(10px); z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .logo { font-size: 1.5rem; font-weight: 700; } .logo span { color: var(--accent); }
-        .nav-tabs { display: flex; gap: 10px; }
-        .tab-btn { background: transparent; border: 1px solid #333; color: var(--text-dim); padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        .tab-btn.active { background: var(--text); color: #000; font-weight: 700; border-color: var(--text); }
-
-        .hero { padding-top: 100px; text-align: center; padding-bottom: 20px; }
-        .device-switch { display: inline-flex; background: var(--card); padding: 5px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #333; }
-        .dev-btn { padding: 10px 20px; background: transparent; border: none; color: var(--text-dim); cursor: pointer; border-radius: 8px; display: flex; gap: 8px; align-items: center; transition: 0.3s; }
-        .dev-btn.active { background: var(--accent); color: #000; font-weight: 700; }
-
-        /* CATEGORIES */
-        .cat-row { display: flex; gap: 10px; overflow-x: auto; padding: 10px 5%; scrollbar-width: none; justify-content: center; }
-        .cat-chip { white-space: nowrap; padding: 8px 20px; border-radius: 30px; background: var(--card); border: 1px solid #333; color: var(--text-dim); cursor: pointer; transition: 0.3s; }
-        .cat-chip.active { border-color: var(--accent); color: var(--accent); }
         
-        .sub-cat-row { display: flex; gap: 8px; overflow-x: auto; padding: 5px 5%; justify-content: center; min-height: 40px; margin-bottom: 20px; opacity: 0; transition: 0.3s; transform: translateY(-10px); display: none; }
-        .sub-cat-row.show { opacity: 1; transform: translateY(0); display: flex; }
-        .sub-chip { font-size: 0.85rem; padding: 5px 15px; border-radius: 20px; background: rgba(255,255,255,0.05); cursor: pointer; border: 1px solid transparent; }
-        .sub-chip:hover { background: rgba(255,255,255,0.1); }
-        .sub-chip.active { background: var(--accent); color: #000; font-weight: 600; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
 
-        .grid { column-count: 4; column-gap: 15px; padding: 0 5%; }
-        @media(max-width: 1000px) { .grid { column-count: 2; } }
-        @media(max-width: 600px) { .grid { column-count: 1; } }
+        /* --- 2. CINEMATIC VIDEO BANNER --- */
+        .hero-section {
+            position: relative;
+            height: 70vh; /* Takes up 70% of screen */
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-bottom: 2px solid var(--gold-dark);
+        }
+
+        /* The Background Video */
+        .hero-video {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            opacity: 0.6; /* Dimmed slightly for text readability */
+        }
+
+        /* Dark Overlay on Video */
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(5,5,5,1) 90%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative; z-index: 2;
+            padding: 20px;
+            animation: fadeUp 1.5s ease-out;
+        }
+
+        h1 {
+            font-family: var(--font-royal);
+            font-size: 4rem;
+            background: linear-gradient(to right, var(--gold-light), var(--gold-primary), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        p.subtitle {
+            font-size: 1.1rem; letter-spacing: 2px; color: var(--text-muted);
+            text-transform: uppercase; margin-bottom: 30px;
+        }
+
+        /* --- 3. PREMIUM NAVIGATION (Floating) --- */
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 600px;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50px;
+            padding: 10px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .nav-logo { font-family: var(--font-royal); font-weight: 700; color: var(--gold-primary); letter-spacing: 1px; }
         
-        .card { break-inside: avoid; margin-bottom: 15px; border-radius: 10px; overflow: hidden; position: relative; cursor: pointer; background: #111; }
-        .card img, .card video { width: 100%; display: block; }
-        .overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); }
-        .sub-tag { font-size: 0.7rem; background: var(--accent); color: #000; padding: 2px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
+        .nav-tabs button {
+            background: transparent; border: none; color: var(--text-muted);
+            font-family: var(--font-body); font-weight: 600; text-transform: uppercase;
+            letter-spacing: 1px; padding: 8px 16px; cursor: pointer; transition: 0.4s;
+        }
+        .nav-tabs button.active { color: var(--gold-light); text-shadow: 0 0 10px var(--gold-primary); }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: none; justify-content: center; align-items: center; }
-        .modal.active { display: flex; }
-        .modal-content { max-width: 90%; max-height: 90%; text-align: center; }
-        .modal-content img, .modal-content video { max-height: 80vh; max-width: 100%; border-radius: 10px; }
-        .dl-btn { display: inline-block; margin-top: 20px; padding: 10px 30px; background: var(--accent); color: #000; text-decoration: none; border-radius: 50px; font-weight: 700; }
-        .close { position: absolute; top: 20px; right: 20px; font-size: 2rem; color: #fff; cursor: pointer; }
+        /* --- 4. CONTROLS (Search & Device) --- */
+        .controls-bar {
+            display: flex; justify-content: center; gap: 20px;
+            padding: 40px 20px; flex-wrap: wrap;
+        }
+
+        .device-switch {
+            display: flex; background: var(--bg-panel); border: 1px solid #333;
+            border-radius: 8px; padding: 4px;
+        }
+        .dev-btn {
+            background: transparent; border: none; color: #666; padding: 10px 25px;
+            cursor: pointer; transition: 0.3s; font-family: var(--font-royal);
+        }
+        .dev-btn.active {
+            background: var(--gold-dark); color: #000; font-weight: bold;
+        }
+
+        .search-box {
+            position: relative; width: 300px;
+        }
+        .search-box input {
+            width: 100%; background: transparent; border: none;
+            border-bottom: 1px solid var(--gold-dark); color: white;
+            padding: 10px 30px 10px 5px; font-family: var(--font-body);
+            font-size: 1rem; transition: 0.3s;
+        }
+        .search-box input:focus { border-bottom: 1px solid var(--gold-light); box-shadow: 0 10px 20px -10px var(--gold-primary); }
+        .search-icon { position: absolute; right: 0; top: 10px; color: var(--gold-dark); }
+
+        /* --- 5. LUXURY CATEGORIES --- */
+        .cat-scroll {
+            display: flex; justify-content: center; gap: 15px; padding-bottom: 30px;
+            overflow-x: auto; scrollbar-width: none;
+        }
+        .cat-btn {
+            background: transparent; border: 1px solid #333; color: #888;
+            padding: 8px 24px; font-family: var(--font-royal); font-size: 0.8rem;
+            letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+        }
+        .cat-btn:hover { border-color: var(--gold-dark); color: var(--gold-light); }
+        .cat-btn.active { border-color: var(--gold-primary); color: var(--gold-primary); box-shadow: var(--shadow-gold); }
+
+        /* --- 6. SUB CATEGORIES (Minimal) --- */
+        .sub-scroll {
+            display: flex; justify-content: center; gap: 10px; padding-bottom: 20px;
+            min-height: 40px; opacity: 0; transition: 0.5s;
+        }
+        .sub-scroll.show { opacity: 1; }
+        .sub-btn {
+            font-size: 0.75rem; color: #666; background: transparent; border: none;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .sub-btn.active { color: var(--gold-light); text-decoration: underline; }
+
+        /* --- 7. MASONRY GRID --- */
+        .gallery { column-count: 4; column-gap: 20px; padding: 0 5%; }
+        @media(max-width: 1200px) { .gallery { column-count: 3; } }
+        @media(max-width: 768px) { .gallery { column-count: 2; } }
+        @media(max-width: 500px) { .gallery { column-count: 1; } }
+
+        .card {
+            break-inside: avoid; margin-bottom: 20px; position: relative;
+            background: #111; overflow: hidden; cursor: pointer;
+            border: 1px solid #222; transition: 0.4s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-dark);
+            box-shadow: var(--shadow-gold);
+        }
+        
+        .card img, .card video { width: 100%; display: block; opacity: 0.8; transition: 0.4s; }
+        .card:hover img { opacity: 1; }
+
+        .card-info {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px;
+            background: linear-gradient(transparent, #000);
+            opacity: 0; transition: 0.3s;
+        }
+        .card:hover .card-info { opacity: 1; }
+        
+        .card-title {
+            font-family: var(--font-royal); font-size: 0.8rem; color: var(--gold-light);
+        }
+
+        /* --- 8. MODAL (Pop-up) --- */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 2000; display: none;
+            justify-content: center; align-items: center;
+        }
+        .modal.active { display: flex; animation: fadeIn 0.3s; }
+        .modal-box { text-align: center; max-width: 90%; }
+        .modal-box img, .modal-box video { 
+            max-height: 80vh; max-width: 100%; border: 1px solid var(--gold-dark); 
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+        }
+        .dl-btn {
+            display: inline-block; margin-top: 20px; padding: 12px 40px;
+            background: transparent; border: 1px solid var(--gold-primary);
+            color: var(--gold-primary); text-decoration: none; text-transform: uppercase;
+            font-family: var(--font-royal); letter-spacing: 2px; transition: 0.3s;
+        }
+        .dl-btn:hover { background: var(--gold-primary); color: #000; box-shadow: var(--shadow-gold); }
+        .close-modal { position: absolute; top: 30px; right: 30px; color: white; font-size: 2rem; cursor: pointer; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">Neon<span>Pixel</span></div>
+        <div class="nav-logo">NEONPIXEL</div>
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="setTab('wallpapers')">Photos</button>
-            <button class="tab-btn" onclick="setTab('videos')">Loops</button>
+            <button class="active" onclick="setTab('wallpapers')">Gallery</button>
+            <button onclick="setTab('videos')">Motion</button>
         </div>
     </nav>
 
-    <div class="hero">
+    <section class="hero-section">
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_24fps.mp4" type="video/mp4">
+        </video>
+        
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+            <h1>The Royal Collection</h1>
+            <p class="subtitle">Exquisite 4K Visuals Curated by AI</p>
+        </div>
+    </section>
+
+    <div class="controls-bar">
         <div class="device-switch">
-            <button class="dev-btn active" id="d-mobile" onclick="setDevice('mobile')"><i class="fa-solid fa-mobile"></i> Mobile</button>
-            <button class="dev-btn" id="d-desktop" onclick="setDevice('desktop')"><i class="fa-solid fa-desktop"></i> Desktop</button>
+            <button class="dev-btn active" id="d-mobile" onclick="setDevice('mobile')">MOBILE</button>
+            <button class="dev-btn" id="d-desktop" onclick="setDevice('desktop')">DESKTOP</button>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search Collection..." onkeyup="render()">
+            <i class="fa-solid fa-search search-icon"></i>
         </div>
     </div>
 
-    <div class="cat-row" id="mainCats"></div>
-    <div class="sub-cat-row" id="subCats"></div>
-    <div class="grid" id="grid"></div>
+    <div class="cat-scroll" id="mainCats"></div>
+    <div class="sub-scroll" id="subCats"></div>
+
+    <div class="gallery" id="grid"></div>
 
     <div class="modal" id="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="modal-box">
             <div id="m-preview"></div>
-            <a href="#" id="m-dl" class="dl-btn" download target="_blank">Download</a>
+            <a href="#" id="m-dl" class="dl-btn" download target="_blank">Download Original</a>
         </div>
     </div>
 
@@ -85,13 +273,12 @@
         let state = { tab: 'wallpapers', device: 'mobile', cat: 'All', sub: 'All' };
         
         const SUB_MAP = {
-            "Anime": ["All", "Naruto", "One Piece", "Dragon Ball", "Jujutsu Kaisen", "Demon Slayer", "Attack on Titan", "Solo Leveling"],
-            "Cars": ["All", "JDM", "BMW", "Porsche", "Ferrari", "Lamborghini", "GTR", "Drift"],
-            "Gaming": ["All", "Valorant", "League of Legends", "Elden Ring", "Cyberpunk 2077", "GTA", "Minecraft"],
-            "Nature": ["All", "Forest", "Ocean", "Mountain", "Space", "Rain", "Sunset"],
-            "Cyberpunk": ["All", "Neon", "City", "Robot", "Future", "Glitch"],
-            "Abstract": ["All", "Fluid", "Geometric", "Dark", "Light", "Minimal"],
-            "Technology": ["All", "Code", "AI", "Hacker"]
+            "Anime": ["All", "Naruto", "One Piece", "Dragon Ball", "Jujutsu Kaisen", "Demon Slayer", "Solo Leveling"],
+            "Cars": ["All", "BMW", "Porsche", "Ferrari", "Lamborghini", "GTR", "JDM"],
+            "Gaming": ["All", "Valorant", "Elden Ring", "Cyberpunk 2077", "GTA", "Minecraft"],
+            "Nature": ["All", "Ocean", "Forest", "Mountain", "Space", "Rain"],
+            "Cyberpunk": ["All", "Neon", "City", "Robot", "Future"],
+            "Abstract": ["All", "Dark", "Gold", "Fluid", "Geometric"]
         };
         const MAIN_CATS = ["All", ...Object.keys(SUB_MAP)];
 
@@ -116,39 +303,47 @@
                 const devMatch = (state.tab === 'videos') ? true : (item.device === state.device);
                 const catMatch = (state.cat === 'All') || (item.category === state.cat);
                 const subMatch = (state.sub === 'All') || (item.subcategory === state.sub);
-                return devMatch && catMatch && subMatch;
+                const searchMatch = item.title.toLowerCase().includes(document.getElementById('searchInput').value.toLowerCase());
+                return devMatch && catMatch && subMatch && searchMatch;
             });
 
-            if(!filtered.length) { grid.innerHTML = `<p style="text-align:center;width:100%;color:#888;">No results found.</p>`; return; }
+            if(!filtered.length) { grid.innerHTML = `<p style="text-align:center;width:100%;color:#666;font-family:var(--font-royal);">No artifacts found.</p>`; return; }
 
             grid.innerHTML = filtered.map(item => `
-                <div class="card fade-in" onclick='openModal(${JSON.stringify(item)})'>
+                <div class="card" onclick='openModal(${JSON.stringify(item)})'>
                     ${item.type === 'image' 
                         ? `<img src="${item.src.replace('/upload/', '/upload/w_500,f_auto,q_auto/')}" loading="lazy">` 
                         : `<video src="${item.src}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`
                     }
-                    <div class="overlay"><span class="sub-tag">${item.subcategory}</span></div>
+                    <div class="card-info">
+                        <div class="card-title">${item.subcategory}</div>
+                    </div>
                 </div>
             `).join('');
         }
 
         function renderCats() {
             document.getElementById('mainCats').innerHTML = MAIN_CATS.map(cat => `
-                <div class="cat-chip ${cat === state.cat ? 'active' : ''}" onclick="setCat('${cat}')">${cat}</div>
+                <button class="cat-btn ${cat === state.cat ? 'active' : ''}" onclick="setCat('${cat}')">${cat}</button>
             `).join('');
             renderSubCats();
         }
 
         function renderSubCats() {
             const sc = document.getElementById('subCats');
-            if (state.cat === 'All' || !SUB_MAP[state.cat]) { sc.className = "sub-cat-row"; return; }
-            sc.className = "sub-cat-row show";
+            if (state.cat === 'All' || !SUB_MAP[state.cat]) { sc.className = "sub-scroll"; return; }
+            sc.className = "sub-scroll show";
             sc.innerHTML = SUB_MAP[state.cat].map(sub => `
-                <div class="sub-chip ${sub === state.sub ? 'active' : ''}" onclick="setSub('${sub}')">${sub}</div>
+                <button class="sub-btn ${sub === state.sub ? 'active' : ''}" onclick="setSub('${sub}')">${sub}</button>
             `).join('');
         }
 
-        function setTab(t) { state.tab = t; updateActive('.tab-btn'); render(); }
+        function setTab(t) { 
+            state.tab = t; 
+            document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            render(); 
+        }
         function setDevice(d) { state.device = d; updateActive('.dev-btn'); render(); }
         function setCat(c) { state.cat = c; state.sub = 'All'; renderCats(); render(); }
         function setSub(s) { state.sub = s; renderSubCats(); render(); }
