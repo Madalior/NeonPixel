@@ -15,141 +15,93 @@ cloudinary.config(
   api_secret = os.environ.get('CLOUDINARY_API_SECRET')
 )
 
+# --- HELPER: SAVE JSON SAFELY ---
+def save_json(filepath, new_data, limit=100):
+    os.makedirs("data", exist_ok=True)
+    
+    # Load existing data
+    existing_data = []
+    if os.path.exists(filepath):
+        try:
+            with open(filepath, "r") as f:
+                existing_data = json.load(f)
+        except:
+            existing_data = []
+
+    # If no file exists, create an empty one at minimum
+    if not os.path.exists(filepath) and not new_data:
+        with open(filepath, "w") as f:
+            json.dump([], f, indent=4)
+        return
+
+    # If we have new data, merge and save
+    if new_data:
+        final_data = new_data + existing_data
+        final_data = final_data[:limit]
+        with open(filepath, "w") as f:
+            json.dump(final_data, f, indent=4)
+        print(f"✅ Updated {filepath} with {len(new_data)} new items.")
+
 # --- 1. DOWNLOAD IMAGES (UNSPLASH) ---
 def get_unsplash_images():
     print("📸 Starting Image Search (Unsplash)...")
-    new_items = []
-    
     api_key = os.environ.get('UNSPLASH_ACCESS_KEY')
     if not api_key:
-        print("⚠️ No Unsplash Key found.")
+        print("⚠️ No Unsplash Key found. Skipping.")
         return []
 
+    new_items = []
     for cat in CATEGORIES:
         try:
             url = "https://api.unsplash.com/photos/random"
-            params = {
-                "query": f"{cat} dark wallpaper",
-                "count": 1, 
-                "orientation": "portrait",
-                "client_id": api_key
-            }
-            
+            params = {"query": f"{cat} dark wallpaper", "count": 1, "orientation": "portrait", "client_id": api_key}
             data = requests.get(url, params=params).json()
             
-            # Error check
-            if isinstance(data, dict) and "errors" in data:
-                print(f"   ⚠️ Unsplash Error: {data['errors']}")
-                continue
-                
-            # If data is a list (success)
-            for item in data:
-                img_url = item['urls']['regular']
-                img_id = item['id']
-                
-                print(f"   🚀 Uploading Image: {cat} {img_id}")
-                
-                upload_res = cloudinary.uploader.upload(
-                    img_url, 
-                    folder=f"neonpixel/{cat}", 
-                    public_id=f"{cat}_{img_id}",
-                    tags=[cat, "wallpaper"]
-                )
-                
-                new_items.append({
-                    "title": f"{cat} Wallpaper",
-                    "category": cat,
-                    "src": upload_res['secure_url'],
-                    "type": "image",
-                    "res": "4K"
-                })
-
+            if isinstance(data, list):
+                for item in data:
+                    img_url = item['urls']['regular']
+                    print(f"   🚀 Uploading {cat}...")
+                    res = cloudinary.uploader.upload(img_url, folder=f"neonpixel/{cat}", tags=[cat, "wallpaper"])
+                    new_items.append({
+                        "title": f"{cat} Wallpaper", "category": cat,
+                        "src": res['secure_url'], "type": "image", "res": "4K"
+                    })
         except Exception as e:
-            print(f"   ❌ Image Error ({cat}): {e}")
-            
+            print(f"   ❌ Error {cat}: {e}")
     return new_items
 
 # --- 2. DOWNLOAD VIDEOS (PIXABAY) ---
 def get_pixabay_videos():
     print("🎥 Starting Video Search (Pixabay)...")
-    new_items = []
-    
     api_key = os.environ.get('PIXABAY_API_KEY')
     if not api_key:
-        print("⚠️ No Pixabay Key found.")
+        print("⚠️ No Pixabay Key found. Skipping.")
         return []
 
+    new_items = []
     for cat in CATEGORIES:
         try:
             url = "https://pixabay.com/api/videos/"
-            params = {
-                "key": api_key,
-                "q": f"{cat} vertical loop",
-                "per_page": 3,
-                "video_type": "all"
-            }
-            
+            params = {"key": api_key, "q": f"{cat} vertical loop", "per_page": 3}
             data = requests.get(url, params=params).json()
             
             if "hits" in data and len(data["hits"]) > 0:
                 vid = random.choice(data["hits"])
-                # Pixabay has different sizes. 'medium' or 'small' is best for web.
-                vid_url = vid["videos"]["medium"]["url"]
-                vid_id = vid["id"]
-
-                print(f"   🚀 Uploading Video: {cat} {vid_id}")
-                
-                upload_res = cloudinary.uploader.upload(
-                    vid_url, 
-                    folder=f"neonpixel/videos/{cat}", 
-                    public_id=f"live_{cat}_{vid_id}",
-                    resource_type="video",
-                    tags=[cat, "live"]
-                )
-                
+                print(f"   🚀 Uploading Video {cat}...")
+                res = cloudinary.uploader.upload(vid["videos"]["medium"]["url"], folder=f"neonpixel/videos/{cat}", resource_type="video", tags=[cat, "live"])
                 new_items.append({
-                    "title": f"{cat} Live",
-                    "category": cat,
-                    "path": upload_res['secure_url'],
-                    "type": "video",
-                    "res": "1080p"
+                    "title": f"{cat} Live", "category": cat,
+                    "src": res['secure_url'], "type": "video", "res": "1080p"
                 })
         except Exception as e:
-            print(f"   ❌ Video Error ({cat}): {e}")
-            
+            print(f"   ❌ Error {cat}: {e}")
     return new_items
 
 # --- MAIN TASK ---
-def run_bot():
-    # 1. Get New Content
+if __name__ == "__main__":
     images = get_unsplash_images()
     videos = get_pixabay_videos()
-
-    # 2. Update Wallpapers JSON
-    if images:
-        f_path = "data/cloud_wallpapers.json"
-        existing = []
-        if os.path.exists(f_path):
-            try: existing = json.load(open(f_path))
-            except: pass
-        
-        final_img = images + existing
-        os.makedirs("data", exist_ok=True)
-        json.dump(final_img[:100], open(f_path, "w"), indent=4)
-        print(f"✅ Saved {len(images)} new images.")
-
-    # 3. Update Videos JSON
-    if videos:
-        f_path = "data/videos.json"
-        existing = []
-        if os.path.exists(f_path):
-            try: existing = json.load(open(f_path))
-            except: pass
-            
-        final_vid = videos + existing
-        os.makedirs("data", exist_ok=True)
-        json.dump(final_vid[:50], open(f_path, "w"), indent=4)
-        print(f"✅ Saved {len(videos)} new videos.")
-
-if __name__ == "__main__":
-    run_bot()
+    
+    # Always try to save/create the file
+    save_json("data/cloud_wallpapers.json", images, 200)
+    save_json("data/videos.json", videos, 50)
